@@ -1,0 +1,152 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing:content-box;
+  }
+  
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    padding: 20px;
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 52px;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .header .logo img {
+    height: 40px;
+  }
+  
+  .navigation button {
+    padding: 10px 20px;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    margin-left: 10px;
+    cursor: pointer;
+  }
+  
+  .navigation button:hover {
+    background-color: #555;
+  }
+  
+  .car-details {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+  }
+  
+  .car-image img {
+    width: 100%;
+    max-width: 600px;
+    border-radius: 10px;
+  }
+  
+  .car-info {
+    max-width: 500px;
+    margin-left: 30px;
+  }
+  
+  .car-info h1 {
+    font-size: 2rem;
+    color: #333;
+  }
+  
+  .car-info p {
+    font-size: 1.2rem;
+    color: #777;
+  }
+  
+  .car-options {
+    margin-top: 20px;
+  }
+  
+  .car-option {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+  }
+  
+  .car-option:hover {
+    background-color: #45a049;
+  }
+  
+  .ai-assistant {
+    margin-top: 50px;
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .chat-box {
+    background-color: #333;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 350px;
+  }
+  
+  .chat-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+  }
+  
+  .chat-header h2 {
+    font-size: 1.5rem;
+  }
+  
+  .close-chat {
+    background: none;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .close-chat:hover {
+    color: #ccc;
+  }
+  
+  .chat-content p {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+  }
+  
+  .chat-btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    width: 100%;
+    cursor: pointer;
+  }
+  
+  .chat-btn:hover {
+    background-color: #45a049;
+  }
+  
+  .footer {
+    text-align: center;
+    margin-top: 50px;
+    font-size: 1rem;
+    color: #777;
+  }
+  
