@@ -1,0 +1,67 @@
+<div class="container">
+  <h2>Add a New Vehicle</h2>
+
+  <form #vehicleForm="ngForm" (ngSubmit)="onSubmit(vehicleForm)">
+    <div class="form-group">
+      <label for="title">Vehicle Title</label>
+      <input
+        type="text"
+        id="title"
+        name="title"
+        ngModel
+        placeholder="Enter vehicle title"
+        required
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="category">Category</label>
+      <input
+        type="text"
+        id="category"
+        name="category"
+        ngModel
+        placeholder="Enter category"
+        required
+      />
+    </div>
+    
+    <div class="form-group">
+      <label for="author">Manufacturer</label>
+      <input
+        type="text"
+        id="author"
+        name="manufacturer"
+        ngModel
+        placeholder="Enter manufacturer name"
+        required
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="price">Price</label>
+      <input
+        type="number"
+        id="price"
+        name="price"
+        ngModel
+        placeholder="Enter price"
+        required
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="qty">Quantity</label>
+      <input
+        type="number"
+        id="qty"
+        name="qty"
+        ngModel
+        placeholder="Enter quantity"
+        required
+      />
+    </div>
+
+    <button type="submit" class="button2">Add Vehicle</button>
+  </form>
+</div>
