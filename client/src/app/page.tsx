@@ -19,8 +19,6 @@ export default function Home() {
   return (
     <div className="h-screen w-screen">
       <HomePage />
-      {/* <AddServiceForm onServiceAdded={fetchServices} /> */}
-      {/* <ServiceList services={services} onServiceDeleted={fetchServices} /> */}
     </div>
   );
 }
