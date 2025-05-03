@@ -36,7 +36,9 @@ export default function Page() {
   // Fetch services from the backend
   const fetchServices = async (order = "asc") => {
     try {
-      const response = await fetch(`http://localhost:8080/api/service-records`);
+      const response = await fetch(
+        `http://localhost:8080/api/service-records/sorted?order=${order}`
+      );
       const data = await response.json();
       setServices(data);
     } catch (error) {
@@ -52,17 +54,7 @@ export default function Page() {
   const handleSort = () => {
     const newOrder = sortOrder === "asc" ? "desc" : "asc";
     setSortOrder(newOrder);
-
-    // Sort services locally
-    const sortedServices = [...services].sort((a, b) => {
-      const dateA = new Date(a.date);
-      const dateB = new Date(b.date);
-      return sortOrder === "asc"
-        ? dateA.getTime() - dateB.getTime()
-        : dateB.getTime() - dateA.getTime();
-    });
-
-    setServices(sortedServices);
+    fetchServices(newOrder);
   };
 
   // Handle delete service

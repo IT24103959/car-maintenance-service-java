@@ -80,8 +80,12 @@ public class ServiceTrackerService {
         nextId--; // Decrement nextId after deleting a record
     }
 
-    public void sortServiceRecordsByDate() {
-        SelectionSort.sort(serviceRecords);
+    public void sortServiceRecordsByDate(String order) {
+        if(order.equalsIgnoreCase("asc")){
+            SelectionSort.sortAscending(serviceRecords);
+        }else{
+            SelectionSort.sortDescending(serviceRecords);
+        }
     }
 
     private void loadServiceRecords() {

@@ -84,8 +84,8 @@ public class ServiceController {
     }
 
     @GetMapping("/sorted")
-    public List<ServiceRecord> getSortedServiceRecords() {
-        serviceTrackerService.sortServiceRecordsByDate(); // Sort the records
+    public List<ServiceRecord> getSortedServiceRecords(@RequestParam(defaultValue = "asc") String order) {
+        serviceTrackerService.sortServiceRecordsByDate(order); // Sort the records
         return serviceTrackerService.getServiceRecords(); // Return the sorted list
     }
     @PutMapping("/{id}")
