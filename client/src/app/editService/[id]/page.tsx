@@ -1,8 +1,12 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
 
-export default function Page() {
+export default function EditServicePage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const [formData, setFormData] = useState({
     carModel: "",
     carNumberPlate: "",
@@ -15,9 +19,37 @@ export default function Page() {
     carType: "",
     ownerEmail: "",
     ownerAddress: "",
-    vin: "", // Added VIN field
+    vin: "",
   });
+
   const router = useRouter();
+  const { id: serviceId } = use(params);
+
+  useEffect(() => {
+    if (serviceId) {
+      fetch(`http://localhost:8080/api/service-records/${serviceId}`)
+        .then((response) => response.json())
+        .then((data) => {
+          setFormData({
+            carModel: data.car.modelType,
+            carNumberPlate: data.car.registrationNumber,
+            servicePrice: data.cost.toString(),
+            serviceDate: data.date,
+            ownerName: data.car.owner.name,
+            ownerContact: data.car.owner.tel,
+            jobDescription: data.description,
+            carManufacturer: data.car.manufacturer,
+            carType: data.car.carType,
+            ownerEmail: data.car.owner.email,
+            ownerAddress: data.car.owner.address,
+            vin: data.car.vin,
+          });
+        })
+        .catch((error) =>
+          console.error("Error fetching service record:", error)
+        );
+    }
+  }, [serviceId]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -33,7 +65,7 @@ export default function Page() {
       service: {
         date: formData.serviceDate,
         description: formData.jobDescription,
-        cost: parseFloat(formData.servicePrice),
+        cost: parseFloat(formData.servicePrice), // Ensure cost is a double
       },
       car: {
         manufacturer: formData.carManufacturer,
@@ -52,9 +84,9 @@ export default function Page() {
 
     try {
       const response = await fetch(
-        "http://localhost:8080/api/service-records",
+        `http://localhost:8080/api/service-records/${serviceId}`,
         {
-          method: "POST",
+          method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },
@@ -63,10 +95,10 @@ export default function Page() {
       );
 
       if (response.ok) {
-        console.log("Service record added successfully");
+        console.log("Service record updated successfully");
         router.push("/serviceHistory");
       } else {
-        console.error("Failed to add service record");
+        console.error("Failed to update service record");
       }
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -74,7 +106,7 @@ export default function Page() {
   };
 
   const handleCancel = () => {
-    router.push("/");
+    router.push("/serviceHistory");
   };
 
   return (
@@ -83,7 +115,7 @@ export default function Page() {
         onSubmit={handleSubmit}
         className="bg-white text-slate-900 w-3/5 p-8 rounded-lg shadow-lg"
       >
-        <h1 className="text-2xl font-bold mb-6 text-center">New Service</h1>
+        <h1 className="text-2xl font-bold mb-6 text-center">Edit Service</h1>
         <div className="grid grid-cols-2 gap-6">
           {/* Left Side */}
           <div>
@@ -173,6 +205,7 @@ export default function Page() {
               </label>
               <input
                 type="number"
+                step="0.01"
                 id="servicePrice"
                 name="servicePrice"
                 value={formData.servicePrice}
@@ -273,7 +306,7 @@ export default function Page() {
             type="submit"
             className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
           >
-            Submit
+            Update
           </button>
           <button
             type="button"
