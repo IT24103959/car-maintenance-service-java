@@ -93,7 +93,8 @@ public class ServiceTrackerService {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(",");
-                if (parts.length == 4) {
+                
+                if (parts.length > 0) {
                     LocalDateTime date = LocalDateTime.parse(parts[1]); // Default ISO-8601 format (yyyy-MM-dd)
                     Owner owner = new Owner(parts[9], parts[10], parts[11], parts[12]);
                     Car car = new Car(parts[4], parts[5], parts[6], parts[7], parts[8]);
