@@ -1,8 +1,6 @@
 package com.service.carservice.models;
 
 
-import com.service.carservice.models.Vehicle;
-
 public class Car extends Vehicle {
     private String carType;
 
@@ -17,6 +15,5 @@ public class Car extends Vehicle {
     public void setCarType(String carType) {
         this.carType = carType;
     }
-
 }
 
