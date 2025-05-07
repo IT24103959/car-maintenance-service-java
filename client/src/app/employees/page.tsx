@@ -33,7 +33,7 @@ export default function AdminPage() {
   };
 
   const handleCreateEmployee = async () => {
-    router.push("/employee/addNewEmployee");
+    router.push("/employees/addNewEmployee");
   };
 
   const handleDeleteEmployee = async (id: number) => {

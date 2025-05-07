@@ -7,8 +7,6 @@ export default function AddNewCarPage() {
     carType: "",
     manufacturer: "",
     modelType: "",
-    vin: "",
-    registrationNumber: "",
   });
   const router = useRouter();
 
@@ -24,8 +22,6 @@ export default function AddNewCarPage() {
       carType: formData.carType,
       manufacturer: formData.manufacturer,
       modelType: formData.modelType,
-      vin: formData.vin,
-      registrationNumber: formData.registrationNumber,
     };
 
     try {
@@ -96,37 +92,6 @@ export default function AddNewCarPage() {
             id="modelType"
             name="modelType"
             value={formData.modelType}
-            onChange={handleChange}
-            required
-            className="w-full p-2 border border-gray-300 rounded"
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="vin" className="block font-medium mb-2">
-            VIN:
-          </label>
-          <input
-            type="text"
-            id="vin"
-            name="vin"
-            value={formData.vin}
-            onChange={handleChange}
-            required
-            className="w-full p-2 border border-gray-300 rounded"
-          />
-        </div>
-        <div className="mb-4">
-          <label
-            htmlFor="registrationNumber"
-            className="block font-medium mb-2"
-          >
-            Registration Number:
-          </label>
-          <input
-            type="text"
-            id="registrationNumber"
-            name="registrationNumber"
-            value={formData.registrationNumber}
             onChange={handleChange}
             required
             className="w-full p-2 border border-gray-300 rounded"

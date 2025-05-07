@@ -1,5 +1,7 @@
 package com.service.carservice.models;
 
+import com.service.carservice.service.ServiceTrackerService;
+
 public class Review {
     ServiceRecord serviceRecord;
     String reviewText;
@@ -11,6 +13,8 @@ public class Review {
     }
 
     public void setServiceRecord(ServiceRecord serviceRecord) {
+        ServiceTrackerService serviceTrackerService = new ServiceTrackerService();
+        serviceRecord = serviceTrackerService.getServiceRecordById(serviceRecord.getId());
         this.serviceRecord = serviceRecord;
     }
 

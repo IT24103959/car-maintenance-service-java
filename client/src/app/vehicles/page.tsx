@@ -6,8 +6,6 @@ interface Car {
   carType: string;
   manufacturer: string;
   modelType: string;
-  vin: string;
-  registrationNumber: string;
   owner: null | object;
 }
 
@@ -53,8 +51,6 @@ export default function CarsPage() {
             <th className="py-2 px-4">Car Type</th>
             <th className="py-2 px-4">Manufacturer</th>
             <th className="py-2 px-4">Model</th>
-            <th className="py-2 px-4">VIN</th>
-            <th className="py-2 px-4">Registration Number</th>
           </tr>
         </thead>
         <tbody>
@@ -63,8 +59,6 @@ export default function CarsPage() {
               <td className="py-2 px-4">{car.carType}</td>
               <td className="py-2 px-4">{car.manufacturer}</td>
               <td className="py-2 px-4">{car.modelType}</td>
-              <td className="py-2 px-4">{car.vin}</td>
-              <td className="py-2 px-4">{car.registrationNumber}</td>
             </tr>
           ))}
         </tbody>

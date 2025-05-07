@@ -7,7 +7,6 @@ public abstract class Vehicle {
     protected String registrationNumber;
     protected Owner owner;
 
-
     public Vehicle(String manufacturer, String modelType, String vin, String registrationNumber) {
         this.manufacturer = manufacturer;
         this.modelType = modelType;
@@ -15,6 +14,10 @@ public abstract class Vehicle {
         this.registrationNumber = registrationNumber;
     }
 
+    public Vehicle(String manufacturer, String modelType) {
+        this.manufacturer = manufacturer;
+        this.modelType = modelType;
+    }
 
     public abstract String getCarType();
 

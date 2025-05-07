@@ -1,26 +1,49 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
+interface Car {
+  manufacturer: string;
+  modelType: string;
+  vin: string | null;
+  registrationNumber: string | null;
+  owner: object | null;
+  carType: string;
+}
+
 export default function Page() {
+  const [cars, setCars] = useState<Car[]>([]);
   const [formData, setFormData] = useState({
-    carModel: "",
-    carNumberPlate: "",
+    selectedCar: "",
     servicePrice: "",
     serviceDate: "",
     ownerName: "",
     ownerContact: "",
     jobDescription: "",
-    carManufacturer: "",
-    carType: "",
     ownerEmail: "",
     ownerAddress: "",
-    vin: "", // Added VIN field
   });
   const router = useRouter();
 
+  // Fetch cars from the backend
+  const fetchCars = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/api/cars");
+      const data = await response.json();
+      setCars(data);
+    } catch (error) {
+      console.error("Error fetching cars:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCars();
+  }, []);
+
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -29,6 +52,16 @@ export default function Page() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Find the selected car
+    const selectedCar = cars.find(
+      (car) => `${car.manufacturer} ${car.modelType}` === formData.selectedCar
+    );
+
+    if (!selectedCar) {
+      console.error("Selected car not found");
+      return;
+    }
+
     const payload = {
       service: {
         date: formData.serviceDate,
@@ -36,11 +69,11 @@ export default function Page() {
         cost: parseFloat(formData.servicePrice),
       },
       car: {
-        manufacturer: formData.carManufacturer,
-        modelType: formData.carModel,
-        vin: formData.vin,
-        registrationNumber: formData.carNumberPlate,
-        carType: formData.carType,
+        manufacturer: selectedCar.manufacturer,
+        modelType: selectedCar.modelType,
+        vin: selectedCar.vin,
+        registrationNumber: selectedCar.registrationNumber,
+        carType: selectedCar.carType,
       },
       owner: {
         name: formData.ownerName,
@@ -64,7 +97,7 @@ export default function Page() {
 
       if (response.ok) {
         console.log("Service record added successfully");
-        router.push("/serviceHistory");
+        router.push("/services");
       } else {
         console.error("Failed to add service record");
       }
@@ -88,85 +121,30 @@ export default function Page() {
           {/* Left Side */}
           <div>
             <div className="mb-4">
-              <label
-                htmlFor="carManufacturer"
-                className="block font-medium mb-2"
+              <label htmlFor="selectedCar" className="block font-medium mb-2">
+                Car:
+              </label>
+              <select
+                id="selectedCar"
+                name="selectedCar"
+                value={formData.selectedCar}
+                onChange={handleChange}
+                required
+                className="w-full p-2 border border-gray-300 rounded"
               >
-                Car Manufacturer:
-              </label>
-              <input
-                type="text"
-                id="carManufacturer"
-                name="carManufacturer"
-                value={formData.carManufacturer}
-                onChange={handleChange}
-                required
-                className="w-full p-2 border border-gray-300 rounded"
-              />
+                <option value="" disabled>
+                  Select a car
+                </option>
+                {cars.map((car, index) => (
+                  <option
+                    key={index}
+                    value={`${car.manufacturer} ${car.modelType}`}
+                  >
+                    {car.manufacturer} {car.modelType} ({car.carType})
+                  </option>
+                ))}
+              </select>
             </div>
-            <div className="mb-4">
-              <label htmlFor="carModel" className="block font-medium mb-2">
-                Car Model:
-              </label>
-              <input
-                type="text"
-                id="carModel"
-                name="carModel"
-                value={formData.carModel}
-                onChange={handleChange}
-                required
-                className="w-full p-2 border border-gray-300 rounded"
-              />
-            </div>
-            <div className="mb-4">
-              <label
-                htmlFor="carNumberPlate"
-                className="block font-medium mb-2"
-              >
-                Car Number Plate:
-              </label>
-              <input
-                type="text"
-                id="carNumberPlate"
-                name="carNumberPlate"
-                value={formData.carNumberPlate}
-                onChange={handleChange}
-                required
-                className="w-full p-2 border border-gray-300 rounded"
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="carType" className="block font-medium mb-2">
-                Car Type:
-              </label>
-              <input
-                type="text"
-                id="carType"
-                name="carType"
-                value={formData.carType}
-                onChange={handleChange}
-                required
-                className="w-full p-2 border border-gray-300 rounded"
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="vin" className="block font-medium mb-2">
-                VIN:
-              </label>
-              <input
-                type="text"
-                id="vin"
-                name="vin"
-                value={formData.vin}
-                onChange={handleChange}
-                required
-                className="w-full p-2 border border-gray-300 rounded"
-              />
-            </div>
-          </div>
-
-          {/* Right Side */}
-          <div>
             <div className="mb-4">
               <label htmlFor="servicePrice" className="block font-medium mb-2">
                 Service Price:
@@ -195,6 +173,10 @@ export default function Page() {
                 className="w-full p-2 border border-gray-300 rounded"
               />
             </div>
+          </div>
+
+          {/* Right Side */}
+          <div>
             <div className="mb-4">
               <label htmlFor="ownerName" className="block font-medium mb-2">
                 Owner Name:
@@ -223,38 +205,38 @@ export default function Page() {
                 className="w-full p-2 border border-gray-300 rounded"
               />
             </div>
+            <div className="mb-4">
+              <label htmlFor="ownerEmail" className="block font-medium mb-2">
+                Owner Email:
+              </label>
+              <input
+                type="email"
+                id="ownerEmail"
+                name="ownerEmail"
+                value={formData.ownerEmail}
+                onChange={handleChange}
+                required
+                className="w-full p-2 border border-gray-300 rounded"
+              />
+            </div>
+            <div className="mb-4">
+              <label htmlFor="ownerAddress" className="block font-medium mb-2">
+                Owner Address:
+              </label>
+              <input
+                type="text"
+                id="ownerAddress"
+                name="ownerAddress"
+                value={formData.ownerAddress}
+                onChange={handleChange}
+                required
+                className="w-full p-2 border border-gray-300 rounded"
+              />
+            </div>
           </div>
         </div>
 
         {/* Full Width Fields */}
-        <div className="mb-4">
-          <label htmlFor="ownerEmail" className="block font-medium mb-2">
-            Owner Email:
-          </label>
-          <input
-            type="email"
-            id="ownerEmail"
-            name="ownerEmail"
-            value={formData.ownerEmail}
-            onChange={handleChange}
-            required
-            className="w-full p-2 border border-gray-300 rounded"
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="ownerAddress" className="block font-medium mb-2">
-            Owner Address:
-          </label>
-          <input
-            type="text"
-            id="ownerAddress"
-            name="ownerAddress"
-            value={formData.ownerAddress}
-            onChange={handleChange}
-            required
-            className="w-full p-2 border border-gray-300 rounded"
-          />
-        </div>
         <div className="mb-4">
           <label htmlFor="jobDescription" className="block font-medium mb-2">
             Job Description:

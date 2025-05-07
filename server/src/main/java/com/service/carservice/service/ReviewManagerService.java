@@ -18,9 +18,11 @@ public class ReviewManagerService {
 
     private static final String FILE_PATH = "src/main/resources/data/reviews.txt";
     private LinkedList<Review> reviews;
-    private ServiceTrackerService serviceTrackerService;
 
-    public ReviewManagerService() {
+    private final ServiceTrackerService serviceTrackerService;
+
+    public ReviewManagerService(ServiceTrackerService serviceTrackerService) {
+        this.serviceTrackerService = serviceTrackerService;
         reviews = new LinkedList<>();
         loadReviews();
     }

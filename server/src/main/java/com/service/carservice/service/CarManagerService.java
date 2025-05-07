@@ -37,12 +37,10 @@ public class CarManagerService {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(",");
-                String vin = parts[0];
-                String carType = parts[1];
-                String manufacturer = parts[2];
-                String modelType = parts[3];
-                String registrationNumber = parts[4];
-                Car car = new Car(carType, manufacturer, modelType, vin, registrationNumber);
+                String carType = parts[0];
+                String manufacturer = parts[1];
+                String modelType = parts[2];
+                Car car = new Car(carType, manufacturer, modelType);
                 cars.add(car);
             }
         } catch (IOException e) {
@@ -53,9 +51,7 @@ public class CarManagerService {
     private void saveCars() {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILE_PATH))) {
             for (Car car : cars) {
-                bw.write(car.getVin() + "," + car.getCarType() + "," + car.getManufacturer() + "," + car.getModelType()
-                        + ","
-                        + car.getRegistrationNumber());
+                bw.write(car.getCarType() + "," + car.getManufacturer() + "," + car.getModelType());
                 bw.newLine();
             }
         } catch (IOException e) {

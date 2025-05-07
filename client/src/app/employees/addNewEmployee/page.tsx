@@ -33,7 +33,7 @@ export default function Page() {
 
       if (response.ok) {
         console.log("Employee created successfully");
-        router.push("/admin"); // Redirect to the admin management page
+        router.push("/employees"); // Redirect to the admin management page
       } else {
         console.error("Failed to create employee");
       }
@@ -43,7 +43,7 @@ export default function Page() {
   };
 
   const handleCancel = () => {
-    router.push("/admin");
+    router.push("/employees");
   };
 
   return (
