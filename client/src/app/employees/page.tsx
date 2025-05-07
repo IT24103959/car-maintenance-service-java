@@ -3,49 +3,52 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { AiOutlineHome } from "react-icons/ai";
 
-interface Admin {
+interface Employee {
   id: number;
   name: string;
   email: string;
 }
 
 export default function AdminPage() {
-  const [admins, setAdmins] = useState<Admin[]>([]);
+  const [employees, setEmployees] = useState<Employee[]>([]);
   const router = useRouter();
 
-  // Fetch admins from the backend
-  const fetchAdmins = async () => {
+  // Fetch employees from the backend
+  const fetchEmployees = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/admins");
+      const response = await fetch("http://localhost:8080/api/employees");
       const data = await response.json();
-      setAdmins(data);
+      setEmployees(data);
     } catch (error) {
-      console.error("Error fetching admins:", error);
+      console.error("Error fetching employees:", error);
     }
   };
 
   useEffect(() => {
-    fetchAdmins();
+    fetchEmployees();
   }, []);
 
   const handleHome = () => {
     router.push("/");
   };
 
-  const handleCreateAdmin = async () => {
-    router.push("/admin/addNewAdmin");
+  const handleCreateEmployee = async () => {
+    router.push("/employee/addNewEmployee");
   };
 
-  const handleDeleteAdmin = async (id: number) => {
+  const handleDeleteEmployee = async (id: number) => {
     try {
-      const response = await fetch(`http://localhost:8080/api/admins/${id}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `http://localhost:8080/api/employees/${id}`,
+        {
+          method: "DELETE",
+        }
+      );
       if (response.ok) {
-        fetchAdmins(); // Refresh the admins list
+        fetchEmployees(); // Refresh the employees list
       }
     } catch (error) {
-      console.error("Error deleting admin:", error);
+      console.error("Error deleting employee:", error);
     }
   };
 
@@ -60,19 +63,20 @@ export default function AdminPage() {
           >
             <AiOutlineHome />
           </button>
-
           <button
-            onClick={handleCreateAdmin}
-            className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+            onClick={handleCreateEmployee}
+            className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600"
           >
-            Create Admin
+            Create Employee
           </button>
         </div>
       </div>
 
-      {/* Admins Table */}
-      <h2 className="text-xl font-semibold text-white mb-4">Current Admins</h2>
-      <table className="w-4/5 bg-white text-slate-900 rounded-lg shadow-lg text-left mb-8">
+      {/* Employees Table */}
+      <h2 className="text-xl font-semibold text-white mb-4">
+        Current Employees
+      </h2>
+      <table className="w-4/5 bg-white text-slate-900 rounded-lg shadow-lg text-left">
         <thead>
           <tr className="bg-gray-200">
             <th className="py-2 px-4">ID</th>
@@ -82,14 +86,14 @@ export default function AdminPage() {
           </tr>
         </thead>
         <tbody>
-          {admins.map((admin) => (
-            <tr key={admin.id} className="border-b">
-              <td className="py-2 px-4">{admin.id}</td>
-              <td className="py-2 px-4">{admin.name}</td>
-              <td className="py-2 px-4">{admin.email}</td>
+          {employees.map((employee) => (
+            <tr key={employee.id} className="border-b">
+              <td className="py-2 px-4">{employee.id}</td>
+              <td className="py-2 px-4">{employee.name}</td>
+              <td className="py-2 px-4">{employee.email}</td>
               <td className="py-2 px-4">
                 <button
-                  onClick={() => handleDeleteAdmin(admin.id)}
+                  onClick={() => handleDeleteEmployee(employee.id)}
                   className="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600"
                 >
                   Delete
