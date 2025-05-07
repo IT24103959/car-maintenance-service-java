@@ -19,55 +19,62 @@ public class EmployeeManagerService {
     private LinkedList<Employee> employees;
     private int nextId = 1;
 
-    public EmployeeManagerService(){
+    public EmployeeManagerService() {
         employees = new LinkedList<>();
         loadEmployees();
         setNextId();
     }
 
-    private void setNextId(){
+    private void setNextId() {
         int maxId = 0;
-        for(Employee employee: employees){
-            if(employee.getId() > maxId){
+        for (Employee employee : employees) {
+            if (employee.getId() > maxId) {
                 maxId = employee.getId();
             }
         }
         nextId = maxId + 1;
     }
 
-    public List<Employee> getEmployees(){
+    public List<Employee> getEmployees() {
         return employees;
     }
 
-    public void addEmployee(String name){
-        Employee employee = new Employee(nextId, name);
+    public void addEmployee(String name, String email) {
+        Employee employee = new Employee(nextId, name, email);
         employees.add(employee);
         saveEmployees();
         nextId++;
     }
 
-    private void loadEmployees(){
-        try(BufferedReader br = new BufferedReader(new FileReader(FILE_PATH))){
+    public void deleteEmployee(Long id) {
+        employees.removeIf(employee -> employee.getId() == id);
+        saveEmployees();
+        nextId--;
+    }
+
+    private void loadEmployees() {
+        try (BufferedReader br = new BufferedReader(new FileReader(FILE_PATH))) {
             String line;
-            while((line = br.readLine()) != null){
+            while ((line = br.readLine()) != null) {
                 String[] parts = line.split(",");
                 int id = Integer.parseInt(parts[0]);
                 String name = parts[1];
-                Employee employee = new Employee(id, name);
+                String email = parts[2];
+                Employee employee = new Employee(id, name, email);
                 employees.add(employee);
             }
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void saveEmployees(){
-        try(BufferedWriter bw = new BufferedWriter(new FileWriter(FILE_PATH))){
-            for (Employee employee : employees){
-                bw.write(employee.getId() + "," + employee.getName());
+    private void saveEmployees() {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILE_PATH))) {
+            for (Employee employee : employees) {
+                bw.write(employee.getId() + "," + employee.getName() + "," + employee.getEmail());
                 bw.newLine();
             }
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

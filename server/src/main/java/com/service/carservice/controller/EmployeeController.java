@@ -26,8 +26,14 @@ public class EmployeeController {
 
     @PostMapping
     public ResponseEntity<Void> addEmployee(@RequestBody Employee employee) {
-        employeeManagerService.addEmployee(employee.getName());
+        employeeManagerService.addEmployee(employee.getName(), employee.getEmail());
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteEmployee(@PathVariable Long id) {
+        employeeManagerService.deleteEmployee(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }

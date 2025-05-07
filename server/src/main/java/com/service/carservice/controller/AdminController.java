@@ -1,4 +1,7 @@
 package com.service.carservice.controller;
+
+import java.util.List;
+
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,19 +18,22 @@ public class AdminController {
     @Autowired
     private AdminManagerService adminManagerService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Admin> getAdmin(@PathVariable int id) {
-        Admin admin = adminManagerService.getAdminById(id);
-        if (admin == null){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(admin, HttpStatus.OK);
+    @GetMapping
+    public ResponseEntity<List<Admin>> getAdmin() {
+        List<Admin> admins = adminManagerService.getAllAdmins();
+
+        return new ResponseEntity<>(admins, HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<Void> addAdmin(@RequestBody Admin admin) {
-        adminManagerService.addAdmin(admin.getUsername());
+        adminManagerService.addAdmin(admin.getName(), admin.getEmail());
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteAdmin(@PathVariable int id) {
+        adminManagerService.deleteAdmin(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }
