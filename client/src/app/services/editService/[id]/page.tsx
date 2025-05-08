@@ -90,7 +90,7 @@ export default function EditServicePage() {
     }
 
     const payload = {
-      service: {
+      serviceRecord: {
         date: formData.serviceDate,
         description: formData.jobDescription,
         cost: parseFloat(formData.servicePrice),

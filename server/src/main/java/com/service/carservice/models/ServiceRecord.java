@@ -2,11 +2,19 @@ package com.service.carservice.models;
 
 import java.time.LocalDateTime;
 
-
 public class ServiceRecord extends Record {
     private Car car;
     private LocalDateTime date;
     private String description;
+
+    public ServiceRecord() {
+    }
+
+    public ServiceRecord(LocalDateTime date, String description, double cost) {
+        this.date = date;
+        this.description = description;
+        this.cost = cost;
+    }
 
     public ServiceRecord(int id, LocalDateTime date, String description, double cost) {
         this.id = id;

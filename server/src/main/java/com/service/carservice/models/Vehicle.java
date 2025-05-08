@@ -7,6 +7,9 @@ public abstract class Vehicle {
     protected String registrationNumber;
     protected Owner owner;
 
+    public Vehicle() {
+    }
+
     public Vehicle(String manufacturer, String modelType, String vin, String registrationNumber) {
         this.manufacturer = manufacturer;
         this.modelType = modelType;

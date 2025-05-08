@@ -1,5 +1,6 @@
 package com.service.carservice.service;
 
+import com.service.carservice.dto.ServiceRecordRequestDTO;
 import com.service.carservice.models.Car;
 import com.service.carservice.models.Owner;
 import com.service.carservice.models.ServiceRecord;
@@ -11,37 +12,51 @@ import java.util.LinkedList;
 import java.util.List;
 import java.time.LocalDateTime;
 
-
 @Service
 public class ServiceTrackerService {
     private static final String FILE_PATH = "src/main/resources/data/service-history.txt";
     private LinkedList<ServiceRecord> serviceRecords;
-    private int nextId = 1; // Initialize nextId to 1
+    private int nextId = 1;
 
     public ServiceTrackerService() {
         serviceRecords = new LinkedList<>();
         loadServiceRecords();
-        setNextId(); // Set nextId based on loaded records
+        setNextId();
     }
 
-    public void addServiceRecord(ServiceRecord record) {
-        serviceRecords.add(record);
+    public void addServiceRecord(ServiceRecordRequestDTO requestDTO) {
+        Car car = requestDTO.getCar();
+        Owner owner = requestDTO.getOwner();
+        ServiceRecord serviceRecord = requestDTO.getServiceRecord();
+
+        car.setOwner(owner);
+        serviceRecord.setCar(car);
+        serviceRecord.setId(nextId++);
+
+        serviceRecords.add(serviceRecord);
         saveServiceRecords();
-        nextId++; // Increment nextId after adding a new record
     }
 
-    public ServiceRecord updateServiceRecord(int id, LocalDateTime date, String description, double cost, Car car) {
-        ServiceRecord record = getServiceRecordById(id); // Assume this method exists to fetch a record by ID
-        if (record != null) {
-            record.setDate(date);
-            record.setDescription(description);
-            record.setCost(cost);
-            record.setCar(car);
+    public ServiceRecord updateServiceRecord(int id, ServiceRecordRequestDTO recordDTO) {
+        ServiceRecord currentRecord = getServiceRecordById(id);
+        if (currentRecord != null) {
+            ServiceRecord updatedRecord = recordDTO.getServiceRecord();
+            Car updatedCar = recordDTO.getCar();
+            Owner updatedOwner = recordDTO.getOwner();
+
+            currentRecord.setDate(updatedRecord.getDate());
+            currentRecord.setDescription(updatedRecord.getDescription());
+            currentRecord.setCost(updatedRecord.getCost());
+            currentRecord.setCar(updatedCar);
+            updatedCar.setOwner(updatedOwner);
+            currentRecord.setCompleted(updatedRecord.getCompleted());
+
+            saveServiceRecords();
         }
-        return record;
+        return currentRecord;
     }
 
-    public ServiceRecord completeServiceRecord(int id){
+    public ServiceRecord completeServiceRecord(int id) {
         ServiceRecord record = getServiceRecordById(id); // Assume this method exists to fetch a record by ID
         if (record != null) {
             record.setCompleted(true);
@@ -81,9 +96,9 @@ public class ServiceTrackerService {
     }
 
     public void sortServiceRecordsByDate(String order) {
-        if(order.equalsIgnoreCase("asc")){
+        if (order.equalsIgnoreCase("asc")) {
             SelectionSort.sortAscending(serviceRecords);
-        }else{
+        } else {
             SelectionSort.sortDescending(serviceRecords);
         }
     }
@@ -93,7 +108,7 @@ public class ServiceTrackerService {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(",");
-                
+
                 if (parts.length > 0) {
                     LocalDateTime date = LocalDateTime.parse(parts[1]); // Default ISO-8601 format (yyyy-MM-dd)
                     Owner owner = new Owner(parts[9], parts[10], parts[11], parts[12]);
@@ -101,9 +116,11 @@ public class ServiceTrackerService {
                     car.setOwner(owner);
 
                     // Create a new ServiceRecord object
-                    ServiceRecord record = new ServiceRecord(Integer.parseInt(parts[0]), date, parts[2], Double.parseDouble(parts[3]));
+                    ServiceRecord record = new ServiceRecord(Integer.parseInt(parts[0]), date, parts[2],
+                            Double.parseDouble(parts[3]));
                     record.setCar(car);
-                    record.setCompleted(Boolean.parseBoolean(parts[13])); // Assuming the last part is a boolean for completion status
+                    record.setCompleted(Boolean.parseBoolean(parts[13])); // Assuming the last part is a boolean for
+                                                                          // completion status
                     serviceRecords.add(record);
                 }
             }
@@ -144,8 +161,7 @@ public class ServiceTrackerService {
                                 + "," +
                                 owner.getAddress()
                                 + "," +
-                                record.getCompleted()
-                );
+                                record.getCompleted());
                 bw.newLine();
             }
         } catch (IOException e) {
