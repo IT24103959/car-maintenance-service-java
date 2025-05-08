@@ -1,6 +1,6 @@
 package com.service.carservice.models;
 
-import com.service.carservice.service.ServiceTrackerService;
+import com.service.carservice.services.ServiceTrackerService;
 
 public class Review {
     ServiceRecord serviceRecord;

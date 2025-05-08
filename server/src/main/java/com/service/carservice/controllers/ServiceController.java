@@ -1,10 +1,10 @@
-package com.service.carservice.controller;
+package com.service.carservice.controllers;
 
 import java.util.List;
 
 import com.service.carservice.models.ServiceRecord;
 import com.service.carservice.dto.ServiceRecordRequestDTO;
-import com.service.carservice.service.ServiceTrackerService;
+import com.service.carservice.services.ServiceTrackerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,4 @@
-package com.service.carservice.controller;
+package com.service.carservice.controllers;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.service.carservice.service.CarManagerService;
+import com.service.carservice.services.CarManagerService;
 import com.service.carservice.models.Car;
 
 

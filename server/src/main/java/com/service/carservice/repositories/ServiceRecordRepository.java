@@ -1,67 +1,44 @@
-package com.service.carservice.service;
+package com.service.carservice.repositories;
 
-import com.service.carservice.dto.ServiceRecordRequestDTO;
 import com.service.carservice.models.Car;
 import com.service.carservice.models.Owner;
 import com.service.carservice.models.ServiceRecord;
-import com.service.carservice.util.SelectionSort;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
 import java.io.*;
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
-import java.time.LocalDateTime;
 
-@Service
-public class ServiceTrackerService {
+@Repository
+public class ServiceRecordRepository {
     private static final String FILE_PATH = "src/main/resources/data/service-history.txt";
-    private LinkedList<ServiceRecord> serviceRecords;
+    private LinkedList<ServiceRecord> serviceRecords = new LinkedList<>();
     private int nextId = 1;
 
-    public ServiceTrackerService() {
-        serviceRecords = new LinkedList<>();
+    public ServiceRecordRepository() {
         loadServiceRecords();
         setNextId();
     }
 
-    public void addServiceRecord(ServiceRecordRequestDTO requestDTO) {
-        Car car = requestDTO.getCar();
-        Owner owner = requestDTO.getOwner();
-        ServiceRecord serviceRecord = requestDTO.getServiceRecord();
-
-        car.setOwner(owner);
-        serviceRecord.setCar(car);
-        serviceRecord.setId(nextId++);
-
-        serviceRecords.add(serviceRecord);
-        saveServiceRecords();
+    public List<ServiceRecord> getAllServiceRecords() {
+        return serviceRecords;
     }
 
-    public ServiceRecord updateServiceRecord(int id, ServiceRecordRequestDTO recordDTO) {
-        ServiceRecord currentRecord = getServiceRecordById(id);
-        if (currentRecord != null) {
-            ServiceRecord updatedRecord = recordDTO.getServiceRecord();
-            Car updatedCar = recordDTO.getCar();
-            Owner updatedOwner = recordDTO.getOwner();
-
-            currentRecord.setDate(updatedRecord.getDate());
-            currentRecord.setDescription(updatedRecord.getDescription());
-            currentRecord.setCost(updatedRecord.getCost());
-            currentRecord.setCar(updatedCar);
-            updatedCar.setOwner(updatedOwner);
-            currentRecord.setCompleted(updatedRecord.getCompleted());
-
-            saveServiceRecords();
-        }
-        return currentRecord;
+    public void saveServiceRecords(List<ServiceRecord> records) {
+        this.serviceRecords = new LinkedList<>(records);
+        persistToFile();
     }
 
-    public ServiceRecord completeServiceRecord(int id) {
-        ServiceRecord record = getServiceRecordById(id); // Assume this method exists to fetch a record by ID
-        if (record != null) {
-            record.setCompleted(true);
-        }
-        return record;
+    public void addServiceRecord(ServiceRecord record) {
+        record.setId(nextId++);
+        serviceRecords.add(record);
+        persistToFile();
+    }
+
+    public void deleteServiceRecord(int id) {
+        serviceRecords.removeIf(record -> record.getId() == id);
+        persistToFile();
     }
 
     public ServiceRecord getServiceRecordById(int id) {
@@ -69,38 +46,6 @@ public class ServiceTrackerService {
                 .filter(record -> record.getId() == id)
                 .findFirst()
                 .orElse(null);
-    }
-
-    public List<ServiceRecord> getServiceRecords() {
-        return serviceRecords;
-    }
-
-    public int getNextId() {
-        return nextId;
-    }
-
-    private void setNextId() {
-        int maxId = 0;
-        for (ServiceRecord record : serviceRecords) {
-            if (record.getId() > maxId) {
-                maxId = record.getId();
-            }
-        }
-        nextId = maxId + 1; // Set nextId to the maximum ID + 1
-    }
-
-    public void deleteServiceRecord(int id) {
-        serviceRecords.removeIf(record -> record.getId() == id);
-        saveServiceRecords();
-        nextId--; // Decrement nextId after deleting a record
-    }
-
-    public void sortServiceRecordsByDate(String order) {
-        if (order.equalsIgnoreCase("asc")) {
-            SelectionSort.sortAscending(serviceRecords);
-        } else {
-            SelectionSort.sortDescending(serviceRecords);
-        }
     }
 
     private void loadServiceRecords() {
@@ -129,7 +74,7 @@ public class ServiceTrackerService {
         }
     }
 
-    private void saveServiceRecords() {
+    private void persistToFile() {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILE_PATH))) {
             for (ServiceRecord record : serviceRecords) {
                 Car car = record.getCar();
@@ -167,5 +112,13 @@ public class ServiceTrackerService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void setNextId() {
+        int maxId = serviceRecords.stream()
+                .mapToInt(ServiceRecord::getId)
+                .max()
+                .orElse(0);
+        nextId = maxId + 1;
     }
 }

@@ -1,4 +1,4 @@
-package com.service.carservice.controller;
+package com.service.carservice.controllers;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
 import com.service.carservice.models.Employee;
-import com.service.carservice.service.EmployeeManagerService;
+import com.service.carservice.services.EmployeeManagerService;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
