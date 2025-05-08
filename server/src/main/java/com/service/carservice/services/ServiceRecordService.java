@@ -11,7 +11,7 @@ import com.service.carservice.repositories.ServiceRecordRepository;
 import com.service.carservice.util.SelectionSort;
 
 @Service
-public class ServiceTrackerService {
+public class ServiceRecordService {
 
     @Autowired
     private ServiceRecordRepository serviceRecordRepository;

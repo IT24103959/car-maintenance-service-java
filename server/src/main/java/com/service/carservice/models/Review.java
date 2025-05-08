@@ -1,6 +1,6 @@
 package com.service.carservice.models;
 
-import com.service.carservice.services.ServiceTrackerService;
+import com.service.carservice.services.ServiceRecordService;
 
 public class Review {
     ServiceRecord serviceRecord;
@@ -13,8 +13,8 @@ public class Review {
     }
 
     public void setServiceRecord(ServiceRecord serviceRecord) {
-        ServiceTrackerService serviceTrackerService = new ServiceTrackerService();
-        serviceRecord = serviceTrackerService.getServiceRecordById(serviceRecord.getId());
+        ServiceRecordService serviceRecordService = new ServiceRecordService();
+        serviceRecord = serviceRecordService.getServiceRecordById(serviceRecord.getId());
         this.serviceRecord = serviceRecord;
     }
 

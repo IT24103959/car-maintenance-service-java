@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.service.carservice.models.ServiceRecord;
 import com.service.carservice.dto.ServiceRecordRequestDTO;
-import com.service.carservice.services.ServiceTrackerService;
+import com.service.carservice.services.ServiceRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,12 +16,12 @@ import org.springframework.web.bind.annotation.*;
 public class ServiceController {
 
     @Autowired
-    private ServiceTrackerService serviceTrackerService;
+    private ServiceRecordService serviceRecordService;
 
     @PostMapping
     public ResponseEntity<ServiceRecord> createServiceRecord(@RequestBody ServiceRecordRequestDTO requestDTO) {
         try {
-            serviceTrackerService.addServiceRecord(requestDTO);
+            serviceRecordService.addServiceRecord(requestDTO);
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (Exception e) {
             e.printStackTrace();
@@ -31,27 +31,27 @@ public class ServiceController {
 
     @GetMapping
     public ResponseEntity<List<ServiceRecord>> getServiceRecords() {
-        List<ServiceRecord> serviceRecords = serviceTrackerService.getServiceRecords();
+        List<ServiceRecord> serviceRecords = serviceRecordService.getServiceRecords();
         return new ResponseEntity<>(serviceRecords, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteServiceRecord(@PathVariable int id) {
-        serviceTrackerService.deleteServiceRecord(id);
+        serviceRecordService.deleteServiceRecord(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @GetMapping("/sorted")
     public List<ServiceRecord> getSortedServiceRecords(@RequestParam(defaultValue = "asc") String order) {
-        serviceTrackerService.sortServiceRecordsByDate(order);
-        return serviceTrackerService.getServiceRecords();
+        serviceRecordService.sortServiceRecordsByDate(order);
+        return serviceRecordService.getServiceRecords();
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ServiceRecord> updateServiceRecord(@PathVariable int id,
             @RequestBody ServiceRecordRequestDTO requestDTO) {
         try {
-            ServiceRecord updatedRecord = serviceTrackerService.updateServiceRecord(id, requestDTO);
+            ServiceRecord updatedRecord = serviceRecordService.updateServiceRecord(id, requestDTO);
             if (updatedRecord == null) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
@@ -65,7 +65,7 @@ public class ServiceController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ServiceRecord> getServiceRecordById(@PathVariable int id) {
-        ServiceRecord serviceRecord = serviceTrackerService.getServiceRecordById(id);
+        ServiceRecord serviceRecord = serviceRecordService.getServiceRecordById(id);
         if (serviceRecord == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -74,7 +74,7 @@ public class ServiceController {
 
     @PatchMapping("/complete/{id}")
     public ResponseEntity<ServiceRecord> completeServiceRecord(@PathVariable int id) {
-        ServiceRecord serviceRecord = serviceTrackerService.completeServiceRecord(id);
+        ServiceRecord serviceRecord = serviceRecordService.completeServiceRecord(id);
         if (serviceRecord == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
