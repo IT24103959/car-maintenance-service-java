@@ -35,7 +35,7 @@ export default function AddNewCarPage() {
 
       if (response.ok) {
         console.log("Car created successfully");
-        router.push("/vehicle"); // Redirect to the cars management page
+        router.push("/vehicles"); // Redirect to the cars management page
       } else {
         console.error("Failed to create car");
       }

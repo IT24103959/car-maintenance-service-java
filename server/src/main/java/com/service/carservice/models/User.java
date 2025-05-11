@@ -1,9 +1,12 @@
 package com.service.carservice.models;
 
-public abstract class User {
+public class User {
     protected int id;
     protected String name;
     protected String email;
+
+    public User() {
+    }
 
     public User(int id, String name, String email) {
         this.id = id;

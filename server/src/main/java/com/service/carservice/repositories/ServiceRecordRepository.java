@@ -57,7 +57,7 @@ public class ServiceRecordRepository {
         }
     }
 
-    public void persistToFile(List<ServiceRecord> serviceRecords) {
+    private void persistToFile(List<ServiceRecord> serviceRecords) {
         try {
             objectMapper.writeValue(Paths.get(FILE_PATH).toFile(), serviceRecords);
         } catch (Exception e) {

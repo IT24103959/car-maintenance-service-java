@@ -67,6 +67,7 @@ export default function Page() {
         date: formData.serviceDate,
         description: formData.jobDescription,
         cost: parseFloat(formData.servicePrice),
+        employeeId: 1,
       },
       car: {
         manufacturer: selectedCar.manufacturer,

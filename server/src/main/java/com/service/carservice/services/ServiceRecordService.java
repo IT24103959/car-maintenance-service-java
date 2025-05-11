@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.service.carservice.dto.ServiceRecordRequestDTO;
 import com.service.carservice.models.ServiceRecord;
+import com.service.carservice.models.Car;
 import com.service.carservice.repositories.ServiceRecordRepository;
 import com.service.carservice.util.SelectionSort;
 
@@ -23,15 +24,16 @@ public class ServiceRecordService {
 
     public void addServiceRecord(ServiceRecordRequestDTO requestDTO) {
         ServiceRecord newRecord = requestDTO.getServiceRecord();
-        newRecord.setCar(requestDTO.getCar());
-        newRecord.getCar().setOwner(requestDTO.getOwner());
+        Car car = requestDTO.getCar();
+        car.setOwner(requestDTO.getOwner());
+        newRecord.setCar(car);
         newRecord.setId(serviceRecordRepository.getNextId()); // Fetch nextId from repository
         serviceRecords.add(newRecord);
         serviceRecordRepository.addServiceRecord(newRecord);
     }
 
     public ServiceRecord updateServiceRecord(int id, ServiceRecordRequestDTO recordDTO) {
-        ServiceRecord currentRecord = serviceRecordRepository.getServiceRecordById(id);
+        ServiceRecord currentRecord = getServiceRecordById(id);
         if (currentRecord != null) {
             ServiceRecord updatedRecord = recordDTO.getServiceRecord();
             currentRecord.setDate(updatedRecord.getDate());
@@ -40,22 +42,28 @@ public class ServiceRecordService {
             currentRecord.setCar(recordDTO.getCar());
             currentRecord.getCar().setOwner(recordDTO.getOwner());
             currentRecord.setCompleted(updatedRecord.getCompleted());
-            serviceRecordRepository.saveServiceRecords(serviceRecordRepository.getAllServiceRecords());
+            currentRecord.setEmployeeId(updatedRecord.getEmployeeId());
+            serviceRecordRepository.saveServiceRecords(serviceRecords);
         }
         return currentRecord;
     }
 
     public ServiceRecord completeServiceRecord(int id) {
-        ServiceRecord record = serviceRecordRepository.getServiceRecordById(id);
+        ServiceRecord record = getServiceRecordById(id);
         if (record != null) {
             record.setCompleted(true);
-            serviceRecordRepository.saveServiceRecords(serviceRecordRepository.getAllServiceRecords());
+            serviceRecordRepository.saveServiceRecords(serviceRecords);
         }
         return record;
     }
 
     public ServiceRecord getServiceRecordById(int id) {
-        return serviceRecordRepository.getServiceRecordById(id);
+        for (ServiceRecord record : serviceRecords) {
+            if (record.getId() == id) {
+                return record;
+            }
+        }
+        return null;
     }
 
     public List<ServiceRecord> getServiceRecords() {
@@ -64,7 +72,7 @@ public class ServiceRecordService {
 
     public void deleteServiceRecord(int id) {
         serviceRecords.removeIf(record -> record.getId() == id);
-        serviceRecordRepository.persistToFile(serviceRecords);
+        serviceRecordRepository.saveServiceRecords(serviceRecords);
     }
 
     public void sortServiceRecordsByDate(String order) {

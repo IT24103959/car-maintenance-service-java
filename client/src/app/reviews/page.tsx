@@ -9,7 +9,7 @@ import { BsPerson } from "react-icons/bs"; // Import person icon
 interface Review {
   reviewText: string;
   rating: number;
-  serviceRecordID: number;
+  serviceId: number;
   serviceDate: string;
   carDetails: string;
   ownerName: string;

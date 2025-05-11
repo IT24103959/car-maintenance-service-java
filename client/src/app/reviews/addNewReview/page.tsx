@@ -10,7 +10,7 @@ interface ServiceRecord {
 export default function AddNewReviewPage() {
   const [serviceRecords, setServiceRecords] = useState<ServiceRecord[]>([]);
   const [formData, setFormData] = useState({
-    serviceRecordID: "",
+    serviceId: "",
     reviewText: "",
     rating: "",
   });
@@ -44,13 +44,9 @@ export default function AddNewReviewPage() {
     e.preventDefault();
 
     const payload = {
-      serviceRecord: {
-        id: parseInt(formData.serviceRecordID),
-      },
-      review: {
-        reviewText: formData.reviewText,
-        rating: parseInt(formData.rating),
-      },
+      serviceId: parseInt(formData.serviceId),
+      reviewText: formData.reviewText,
+      rating: parseInt(formData.rating),
     };
 
     try {
@@ -85,13 +81,13 @@ export default function AddNewReviewPage() {
       >
         <h1 className="text-2xl font-bold mb-6 text-center">Add New Review</h1>
         <div className="mb-4">
-          <label htmlFor="serviceRecordID" className="block font-medium mb-2">
+          <label htmlFor="serviceId" className="block font-medium mb-2">
             Service Record:
           </label>
           <select
-            id="serviceRecordID"
-            name="serviceRecordID"
-            value={formData.serviceRecordID}
+            id="serviceId"
+            name="serviceId"
+            value={formData.serviceId}
             onChange={handleChange}
             required
             className="w-full p-2 border border-gray-300 rounded"
