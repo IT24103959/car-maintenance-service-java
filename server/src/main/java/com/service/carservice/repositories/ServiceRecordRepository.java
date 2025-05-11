@@ -5,6 +5,7 @@ import com.service.carservice.models.ServiceRecord;
 
 import org.springframework.stereotype.Repository;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.LinkedList;
@@ -18,13 +19,10 @@ public class ServiceRecordRepository {
 
     public ServiceRecordRepository() {
         List<ServiceRecord> records = loadServiceRecords();
-        int maxId = 0;
-        for (ServiceRecord record : records) {
-            if (record.getId() > maxId) {
-                maxId = record.getId();
-            }
-        }
-        nextId = maxId + 1;
+        this.nextId = records.stream()
+                .mapToInt(ServiceRecord::getId)
+                .max()
+                .orElse(0) + 1;
     }
 
     public List<ServiceRecord> getAllServiceRecords() {
@@ -49,12 +47,11 @@ public class ServiceRecordRepository {
                 .orElse(null);
     }
 
-    public List<ServiceRecord> loadServiceRecords() {
+    private List<ServiceRecord> loadServiceRecords() {
         try {
-            byte[] jsonData = Files.readAllBytes(Paths.get(FILE_PATH));
-            return objectMapper.readValue(jsonData,
+            return objectMapper.readValue(Files.readAllBytes(Paths.get(FILE_PATH)),
                     objectMapper.getTypeFactory().constructCollectionType(LinkedList.class, ServiceRecord.class));
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
             return new LinkedList<>();
         }

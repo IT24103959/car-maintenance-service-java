@@ -43,12 +43,7 @@ public class AdminRepository {
     }
 
     public List<Admin> getAllAdmins() {
-        try {
-            return objectMapper.readValue(Files.readAllBytes(Paths.get(JSON_FILE_PATH)),
-                    objectMapper.getTypeFactory().constructCollectionType(LinkedList.class, Admin.class));
-        } catch (IOException e) {
-            return new LinkedList<>();
-        }
+        return loadAdmins();
     }
 
     public Admin getAdminById(int id) {

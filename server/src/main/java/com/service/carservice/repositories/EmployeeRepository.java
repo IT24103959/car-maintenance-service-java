@@ -15,52 +15,49 @@ import com.service.carservice.models.Employee;
 public class EmployeeRepository {
 
     private static final String FILE_PATH = "src/main/resources/data/employees.json";
-    private LinkedList<Employee> employees = new LinkedList<>();
     private int nextId = 1;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public EmployeeRepository() {
-        loadEmployees();
-        setNextId();
+        List<Employee> employee = loadEmployees();
+        this.nextId = employee.stream()
+                .mapToInt(Employee::getId)
+                .max()
+                .orElse(0) + 1;
     }
 
     public List<Employee> getAllEmployees() {
-        return employees;
+        return loadEmployees();
     }
 
     public void addEmployee(Employee employee) {
         employee.setId(nextId++);
+        List<Employee> employees = loadEmployees();
         employees.add(employee);
-        persistToFile();
+        persistToFile(employees);
     }
 
     public void deleteEmployee(int id) {
+        List<Employee> employees = loadEmployees();
         employees.removeIf(employee -> employee.getId() == id);
-        persistToFile();
+        persistToFile(employees);
     }
 
-    private void setNextId() {
-        int maxId = employees.stream()
-                .mapToInt(Employee::getId)
-                .max()
-                .orElse(0);
-        nextId = maxId + 1;
-    }
-
-    private void loadEmployees() {
+    private List<Employee> loadEmployees() {
         try {
-            employees = objectMapper.readValue(Files.readAllBytes(Paths.get(FILE_PATH)),
+            return objectMapper.readValue(Files.readAllBytes(Paths.get(FILE_PATH)),
                     objectMapper.getTypeFactory().constructCollectionType(LinkedList.class, Employee.class));
         } catch (IOException e) {
             e.printStackTrace();
+            return new LinkedList<>();
         }
     }
 
-    private void persistToFile() {
+    private void persistToFile(List<Employee> employees) {
         try {
             objectMapper.writeValue(Paths.get(FILE_PATH).toFile(), employees);
         } catch (IOException e) {
-            throw new RuntimeException("Failed to persist employees to file", e);
+            e.printStackTrace();
         }
     }
 

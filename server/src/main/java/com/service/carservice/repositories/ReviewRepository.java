@@ -1,13 +1,13 @@
 package com.service.carservice.repositories;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import com.service.carservice.models.Review;
 
 @Repository
@@ -20,7 +20,7 @@ public class ReviewRepository {
         return loadReviews();
     }
 
-    public void saveReviews(List<Review> reviews) {
+    public void persistToFile(List<Review> reviews) {
         try {
             objectMapper.writeValue(Paths.get(FILE_PATH).toFile(), reviews);
         } catch (Exception e) {
@@ -31,17 +31,16 @@ public class ReviewRepository {
     public void addReview(Review review) {
         List<Review> reviews = loadReviews();
         reviews.add(review);
-        saveReviews(reviews);
+        persistToFile(reviews);
     }
 
     private List<Review> loadReviews() {
         try {
-            byte[] jsonData = Files.readAllBytes(Paths.get(FILE_PATH));
-            return objectMapper.readValue(jsonData,
-                    objectMapper.getTypeFactory().constructCollectionType(ArrayList.class, Review.class));
-        } catch (Exception e) {
+            return objectMapper.readValue(Files.readAllBytes(Paths.get(FILE_PATH)),
+                    objectMapper.getTypeFactory().constructCollectionType(LinkedList.class, Review.class));
+        } catch (IOException e) {
             e.printStackTrace();
-            return new ArrayList<>();
+            return new LinkedList<>();
         }
     }
 }

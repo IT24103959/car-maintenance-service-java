@@ -5,7 +5,17 @@ public class Review {
     String reviewText;
     int rating;
 
+    public Review(){
+
+    }
+
     public Review(String reviewText, int rating) {
+        this.reviewText = reviewText;
+        this.rating = rating;
+    }
+
+    public Review(int serviceId, String reviewText, int rating) {
+        this.serviceId = serviceId;
         this.reviewText = reviewText;
         this.rating = rating;
     }

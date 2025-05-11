@@ -43,12 +43,7 @@ public class CarRepository {
     }
 
     public List<Car> getAllCars() {
-        try {
-            return objectMapper.readValue(Files.readAllBytes(Paths.get(JSON_FILE_PATH)),
-                    objectMapper.getTypeFactory().constructCollectionType(LinkedList.class, Car.class));
-        } catch (IOException e) {
-            return new LinkedList<>();
-        }
+        return loadCars();
     }
 
     public void persistToFile(List<Car> cars) {

@@ -18,7 +18,7 @@ public class ServiceRecordService {
 
     public ServiceRecordService(ServiceRecordRepository serviceRecordRepository) {
         this.serviceRecordRepository = serviceRecordRepository;
-        this.serviceRecords = new LinkedList<>(serviceRecordRepository.loadServiceRecords());
+        this.serviceRecords = new LinkedList<>(serviceRecordRepository.getAllServiceRecords());
     }
 
     public void addServiceRecord(ServiceRecordRequestDTO requestDTO) {
