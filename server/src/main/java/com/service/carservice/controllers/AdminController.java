@@ -19,7 +19,7 @@ public class AdminController {
     private AdminManagerService adminManagerService;
 
     @GetMapping
-    public ResponseEntity<List<Admin>> getAdmin() {
+    public ResponseEntity<List<Admin>> getAdmins() {
         List<Admin> admins = adminManagerService.getAllAdmins();
 
         return new ResponseEntity<>(admins, HttpStatus.OK);
@@ -27,7 +27,7 @@ public class AdminController {
 
     @PostMapping
     public ResponseEntity<Void> addAdmin(@RequestBody Admin admin) {
-        adminManagerService.addAdmin(admin.getName(), admin.getEmail());
+        adminManagerService.addAdmin(admin);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 

@@ -1,6 +1,0 @@
-Sedan,Toyota,Camry
-SUV,Honda,CR-V
-Truck,Ford,F-150
-Hatchback,Mazda,Mazda3
-Sedan,Nissan,Sentra
-Minivan,Chrysler,Pacifica

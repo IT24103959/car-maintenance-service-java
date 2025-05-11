@@ -15,18 +15,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.service.carservice.services.CarManagerService;
 import com.service.carservice.models.Car;
 
-
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/cars")
 public class CarController {
-    
+
     @Autowired
     private CarManagerService carManagerService;
 
     @GetMapping
     public ResponseEntity<List<Car>> getCars() {
-        List<Car> cars = carManagerService.getCars();
+        List<Car> cars = carManagerService.getAllCars();
         return new ResponseEntity<>(cars, HttpStatus.OK);
     }
 
@@ -34,9 +33,6 @@ public class CarController {
     public ResponseEntity<Void> addCar(@RequestBody Car car) {
         carManagerService.addCar(car);
         return new ResponseEntity<>(HttpStatus.CREATED);
-      
     }
-    
-    
 
 }

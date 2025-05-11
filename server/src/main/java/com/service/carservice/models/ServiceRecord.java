@@ -6,6 +6,7 @@ public class ServiceRecord extends Record {
     private Car car;
     private LocalDateTime date;
     private String description;
+    private int employeeId; // New attribute to link service records to employees
 
     public ServiceRecord() {
     }
@@ -53,6 +54,14 @@ public class ServiceRecord extends Record {
 
     public void setCompleted(boolean completed) {
         this.completed = completed;
+    }
+
+    public int getEmployeeId() {
+        return employeeId;
+    }
+
+    public void setEmployeeId(int employeeId) {
+        this.employeeId = employeeId;
     }
 
 }

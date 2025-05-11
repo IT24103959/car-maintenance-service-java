@@ -1,62 +1,37 @@
 package com.service.carservice.services;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
-
+import com.service.carservice.models.Car;
+import com.service.carservice.repositories.CarRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.service.carservice.models.Car;
+import java.util.LinkedList;
+import java.util.List;
 
 @Service
 public class CarManagerService {
 
-    private static final String FILE_PATH = "src/main/resources/data/cars.txt";
+    private final CarRepository carRepository;
     private LinkedList<Car> cars;
 
-    public CarManagerService() {
-        cars = new LinkedList<>();
-        loadCars();
-    }
-
-    public List<Car> getCars() {
-        return cars;
+    @Autowired
+    public CarManagerService(CarRepository carRepository) {
+        this.carRepository = carRepository;
+        this.cars = new LinkedList<>(carRepository.getAllCars());
     }
 
     public void addCar(Car car) {
+        car.setId(carRepository.getNextId()); // Fetch nextId from repository
         cars.add(car);
-        saveCars();
+        carRepository.persistToFile(cars);
     }
 
-    private void loadCars() {
-        try (BufferedReader br = new BufferedReader(new FileReader(FILE_PATH))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] parts = line.split(",");
-                String carType = parts[0];
-                String manufacturer = parts[1];
-                String modelType = parts[2];
-                Car car = new Car(carType, manufacturer, modelType);
-                cars.add(car);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public List<Car> getAllCars() {
+        return cars;
     }
 
-    private void saveCars() {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILE_PATH))) {
-            for (Car car : cars) {
-                bw.write(car.getCarType() + "," + car.getManufacturer() + "," + car.getModelType());
-                bw.newLine();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void deleteCar(int id) {
+        cars.removeIf(car -> car.getId() == id);
+        carRepository.persistToFile(cars);
     }
-
 }

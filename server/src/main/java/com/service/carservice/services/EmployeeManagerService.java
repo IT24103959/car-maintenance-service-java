@@ -1,82 +1,37 @@
 package com.service.carservice.services;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
-
+import com.service.carservice.models.Employee;
+import com.service.carservice.repositories.EmployeeRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.service.carservice.models.Employee;
+import java.util.LinkedList;
+import java.util.List;
 
 @Service
 public class EmployeeManagerService {
 
-    private static final String FILE_PATH = "src/main/resources/data/employees.txt";
+    private final EmployeeRepository employeeRepository;
     private LinkedList<Employee> employees;
-    private int nextId = 1;
 
-    public EmployeeManagerService() {
-        employees = new LinkedList<>();
-        loadEmployees();
-        setNextId();
+    @Autowired
+    public EmployeeManagerService(EmployeeRepository employeeRepository) {
+        this.employeeRepository = employeeRepository;
+        this.employees = new LinkedList<>(employeeRepository.getAllEmployees());
     }
 
-    private void setNextId() {
-        int maxId = 0;
-        for (Employee employee : employees) {
-            if (employee.getId() > maxId) {
-                maxId = employee.getId();
-            }
-        }
-        nextId = maxId + 1;
+    public void addEmployee(Employee employee) {
+        employee.setId(employeeRepository.getNextId()); // Fetch nextId from repository
+        employees.add(employee);
+        employeeRepository.persistToFile(employees);
     }
 
-    public List<Employee> getEmployees() {
+    public List<Employee> getAllEmployees() {
         return employees;
     }
 
-    public void addEmployee(String name, String email) {
-        Employee employee = new Employee(nextId, name, email);
-        employees.add(employee);
-        saveEmployees();
-        nextId++;
-    }
-
-    public void deleteEmployee(Long id) {
+    public void deleteEmployee(int id) {
         employees.removeIf(employee -> employee.getId() == id);
-        saveEmployees();
-        nextId--;
+        employeeRepository.persistToFile(employees);
     }
-
-    private void loadEmployees() {
-        try (BufferedReader br = new BufferedReader(new FileReader(FILE_PATH))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] parts = line.split(",");
-                int id = Integer.parseInt(parts[0]);
-                String name = parts[1];
-                String email = parts[2];
-                Employee employee = new Employee(id, name, email);
-                employees.add(employee);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void saveEmployees() {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILE_PATH))) {
-            for (Employee employee : employees) {
-                bw.write(employee.getId() + "," + employee.getName() + "," + employee.getEmail());
-                bw.newLine();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
 }

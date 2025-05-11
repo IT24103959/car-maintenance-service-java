@@ -1,6 +1,7 @@
 package com.service.carservice.models;
 
 public abstract class Vehicle {
+    protected int id;
     protected String manufacturer;
     protected String modelType;
     protected String vin;
@@ -46,5 +47,13 @@ public abstract class Vehicle {
 
     public String getVin() {
         return vin;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

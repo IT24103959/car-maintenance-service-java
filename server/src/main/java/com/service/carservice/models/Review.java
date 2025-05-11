@@ -1,9 +1,7 @@
 package com.service.carservice.models;
 
-import com.service.carservice.services.ServiceRecordService;
-
 public class Review {
-    ServiceRecord serviceRecord;
+    private int serviceId; // Replacing ServiceRecord object with serviceId
     String reviewText;
     int rating;
 
@@ -12,14 +10,12 @@ public class Review {
         this.rating = rating;
     }
 
-    public void setServiceRecord(ServiceRecord serviceRecord) {
-        ServiceRecordService serviceRecordService = new ServiceRecordService();
-        serviceRecord = serviceRecordService.getServiceRecordById(serviceRecord.getId());
-        this.serviceRecord = serviceRecord;
+    public int getServiceId() {
+        return serviceId;
     }
 
-    public ServiceRecord getServiceRecord() {
-        return serviceRecord;
+    public void setServiceId(int serviceId) {
+        this.serviceId = serviceId;
     }
 
     public int getRating() {

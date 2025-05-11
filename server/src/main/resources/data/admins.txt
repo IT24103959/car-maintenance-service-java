@@ -1,3 +1,0 @@
-1,John Smith,john.123@email.com
-2,Emily Brown,e.brown@samplemail.net
-3,David Lee,david_lee88@mailservice.org

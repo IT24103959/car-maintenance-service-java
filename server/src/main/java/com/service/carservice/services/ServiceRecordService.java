@@ -1,8 +1,8 @@
 package com.service.carservice.services;
 
+import java.util.LinkedList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.service.carservice.dto.ServiceRecordRequestDTO;
@@ -13,14 +13,21 @@ import com.service.carservice.util.SelectionSort;
 @Service
 public class ServiceRecordService {
 
-    @Autowired
-    private ServiceRecordRepository serviceRecordRepository;
+    private final ServiceRecordRepository serviceRecordRepository;
+    private LinkedList<ServiceRecord> serviceRecords;
+
+    public ServiceRecordService(ServiceRecordRepository serviceRecordRepository) {
+        this.serviceRecordRepository = serviceRecordRepository;
+        this.serviceRecords = new LinkedList<>(serviceRecordRepository.loadServiceRecords());
+    }
 
     public void addServiceRecord(ServiceRecordRequestDTO requestDTO) {
-        ServiceRecord serviceRecord = requestDTO.getServiceRecord();
-        serviceRecord.setCar(requestDTO.getCar());
-        serviceRecord.getCar().setOwner(requestDTO.getOwner());
-        serviceRecordRepository.addServiceRecord(serviceRecord);
+        ServiceRecord newRecord = requestDTO.getServiceRecord();
+        newRecord.setCar(requestDTO.getCar());
+        newRecord.getCar().setOwner(requestDTO.getOwner());
+        newRecord.setId(serviceRecords.size() + 1); // Set ID before adding to LinkedList
+        serviceRecords.add(newRecord);
+        serviceRecordRepository.persistToFile(serviceRecords);
     }
 
     public ServiceRecord updateServiceRecord(int id, ServiceRecordRequestDTO recordDTO) {
@@ -56,7 +63,8 @@ public class ServiceRecordService {
     }
 
     public void deleteServiceRecord(int id) {
-        serviceRecordRepository.deleteServiceRecord(id);
+        serviceRecords.removeIf(record -> record.getId() == id);
+        serviceRecordRepository.persistToFile(serviceRecords);
     }
 
     public void sortServiceRecordsByDate(String order) {

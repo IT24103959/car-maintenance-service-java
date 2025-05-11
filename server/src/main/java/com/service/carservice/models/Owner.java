@@ -1,28 +1,28 @@
 package com.service.carservice.models;
 
-public class Owner {
-    private String name;
+public class Owner extends User {
     private String tel;
-    private String email;
     private String address;
 
-    public Owner(String name, String tel, String email, String address) {
-        this.name = name;
+    public Owner(int id, String name, String email, String tel, String address) {
+        super(id, name, email);
         this.tel = tel;
-        this.email = email;
         this.address = address;
     }
 
-    public String getName() {
-        return name;
-    }
     public String getTel() {
         return tel;
     }
-    public String getEmail() {
-        return email;
+
+    public void setTel(String tel) {
+        this.tel = tel;
     }
+
     public String getAddress() {
         return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }
