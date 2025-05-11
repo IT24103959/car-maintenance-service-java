@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { FormsModule, NgForm } from '@angular/forms';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-add-vehicle-page',
@@ -11,22 +12,42 @@ import { FormsModule, NgForm } from '@angular/forms';
   styleUrl: './add-vehicle-page.component.css'
 })
 export class AddVehiclePageComponent {
-  vehicle = {
-    title: '',
-    category: '',
-    manufacturer: '',
-    price: 0,
-    qty: 0
+
+  public vehicle: any = {
+    vehicleModel: '',
+    vehicleYear: '',
+    vehicleRegistrationNumber: '',
   };
 
-  onSubmit(form: NgForm) {
-    if (form.valid) {
-      console.log('Vehicle Added:', this.vehicle);
-      // You can also call a service here to send data to the backend.
-      form.reset();
-    } else {
-      alert('Please fill in all fields.');
-    }
+  constructor(private http:HttpClient){}
+
+  public onSubmit() {
+    if (this.vehicle.vehicleModel && this.vehicle.vehicleYear && this.vehicle.vehicleRegistrationNumber) {
+    this.http.post("http://localhost:8080/vehicle/add-vehicle",this.vehicle).subscribe(()=>{
+      this.successAlert();
+      this.resetForm();
+   },
+   (error) => {
+     console.error('Error:', error);
+   }
+ );
+}
+}
+
+  resetForm() {
+    this.vehicle = {
+      vehicleModel: '',
+      vehicleYear: '',
+      vehicleRegistrationNumber: '',
+    };
+  }
+
+  public successAlert(){
+    Swal.fire({
+      title: "The vehicle Added Successfully?",
+      icon: "success",
+      background:"#fff",
+    });
   }
   
 

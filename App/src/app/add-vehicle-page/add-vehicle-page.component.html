@@ -1,67 +1,46 @@
 <div class="container">
   <h2>Add a New Vehicle</h2>
 
-  <form #vehicleForm="ngForm" (ngSubmit)="onSubmit(vehicleForm)">
+  <form #vehicleForm="ngForm">
     <div class="form-group">
-      <label for="title">Vehicle Title</label>
+      <label for="title">Vehicle Model</label>
       <input
         type="text"
         id="title"
         name="title"
-        ngModel
+        [(ngModel)]="vehicle.vehicleModel"
         placeholder="Enter vehicle title"
         required
+        #vehicleModel="ngModel"
       />
     </div>
 
     <div class="form-group">
-      <label for="category">Category</label>
+      <label for="category">Year</label>
       <input
         type="text"
         id="category"
         name="category"
-        ngModel
+        [(ngModel)]="vehicle.vehicleYear"
         placeholder="Enter category"
         required
+        #vehicleYear="ngModel"
       />
     </div>
     
     <div class="form-group">
-      <label for="author">Manufacturer</label>
+      <label for="author">Registration Number</label>
       <input
         type="text"
         id="author"
         name="manufacturer"
-        ngModel
+        [(ngModel)]="vehicle.vehicleRegistrationNumber"
         placeholder="Enter manufacturer name"
         required
+        #vehicleRegistrationNumber="ngModel"
       />
     </div>
 
-    <div class="form-group">
-      <label for="price">Price</label>
-      <input
-        type="number"
-        id="price"
-        name="price"
-        ngModel
-        placeholder="Enter price"
-        required
-      />
-    </div>
-
-    <div class="form-group">
-      <label for="qty">Quantity</label>
-      <input
-        type="number"
-        id="qty"
-        name="qty"
-        ngModel
-        placeholder="Enter quantity"
-        required
-      />
-    </div>
-
-    <button type="submit" class="button2">Add Vehicle</button>
+    <button type="submit" class="button2" (click)="onSubmit()">Add Vehicle</button>
   </form>
 </div>

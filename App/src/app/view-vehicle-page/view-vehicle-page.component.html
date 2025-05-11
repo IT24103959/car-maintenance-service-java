@@ -1,1 +1,149 @@
-<p>view-vehicle-page works!</p>
+<body class="background">
+    <div class="manage-book-container">
+      <h2>Manage Vehicles</h2>
+  
+      <div class="search">
+        <input
+          placeholder="Search By Id..."
+          type="text"
+          [(ngModel)]="searchQuery"
+          (keyup.enter)="searchVehicle(searchQuery)"
+        />
+        <button type="submit" (click)="searchVehicle(searchQuery)">Go</button>
+      </div>
+  
+      <table>
+        <thead>
+          <tr>
+            <th>Count</th>
+            <th>Id</th>
+            <th>Vehicle Model</th>
+            <th>Year</th>
+            <th>Registration Number</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let vehicle of vehicleList; index as i">
+            <td>{{ i + 1 }}</td>
+            <td>{{ vehicle.vehicleId }}</td>
+            <td>{{ vehicle.vehicleModel }}</td>
+            <td>{{ vehicle.vehicleYear }}</td>
+            <td>{{ vehicle.vehicleRegistrationNumber }}</td>
+            <td>
+              <button (click)="deleteVehicle(vehicle.vehicleId)" class="delete-button">
+                Delete
+              </button>
+            </td>
+            <td>
+              <button
+                (click)="updateVehicle(vehicle)"
+                class="update-button"
+                data-bs-toggle="modal"
+                data-bs-target="#exampleModal"
+              >
+                Update
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+  
+      <div
+        class="modal fade"
+        id="exampleModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Update Vehicle</h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+  
+  
+            <div class="modal-body">
+              <div class="mb-3">
+                <label for="recipient-name" class="col-form-label">Model:</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="vehicleTemp.vehicleModel"
+                  id="recipient-name"
+                  required
+                  #vehicleModel="ngModel"
+                  
+                />
+                <div *ngIf="vehicleModel.invalid && vehicleModel.touched">
+                  <small *ngIf="vehicleModel.errors?.['required']" class="error-text">Model is required.</small>
+                </div>
+              </div>
+  
+  
+              <div class="mb-3">
+                <label for="recipient-name" class="col-form-label">Year:</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="vehicleTemp.vehicleYear"
+                  id="recipient-name"
+                  required
+                  minlength="2"
+                  #vehicleYear="ngModel"
+                />
+                <div *ngIf="vehicleYear.invalid && vehicleYear.touched">
+                  <small *ngIf="vehicleYear.errors?.['required']" class="error-text">Author name is required.</small>
+                  <!-- <small *ngIf="vehicleYear.errors?.['minlength']" class="error-text">Author name must be at least 2 characters long.</small> -->
+                </div>
+              </div>
+  
+  
+              <div class="mb-3">
+                <label for="recipient-name" class="col-form-label">Registration Number:</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="vehicleTemp.vehicleRegistrationNumber"
+                  id="recipient-name"
+                  required
+                  minlength="4"
+                  #vehicleRegistrationNumber="ngModel"
+                />
+                <div *ngIf="vehicleRegistrationNumber.invalid && vehicleRegistrationNumber.touched">
+                  <small *ngIf="vehicleRegistrationNumber.errors?.['required']" class="error-text">Category is required.</small>
+                  <!-- <small *ngIf="vehicleRegistrationNumber.errors?.['minlength']" class="error-text">Category must be at least 4 characters long.</small> -->
+                </div>
+              </div>
+
+            </div>
+  
+  
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                (click)="saveVehicle()"
+                data-bs-dismiss="modal"
+              >
+                Update
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  
