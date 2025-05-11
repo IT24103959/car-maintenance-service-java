@@ -25,9 +25,9 @@ public class ServiceRecordService {
         ServiceRecord newRecord = requestDTO.getServiceRecord();
         newRecord.setCar(requestDTO.getCar());
         newRecord.getCar().setOwner(requestDTO.getOwner());
-        newRecord.setId(serviceRecords.size() + 1); // Set ID before adding to LinkedList
+        newRecord.setId(serviceRecordRepository.getNextId()); // Fetch nextId from repository
         serviceRecords.add(newRecord);
-        serviceRecordRepository.persistToFile(serviceRecords);
+        serviceRecordRepository.addServiceRecord(newRecord);
     }
 
     public ServiceRecord updateServiceRecord(int id, ServiceRecordRequestDTO recordDTO) {
@@ -59,7 +59,7 @@ public class ServiceRecordService {
     }
 
     public List<ServiceRecord> getServiceRecords() {
-        return serviceRecordRepository.getAllServiceRecords();
+        return serviceRecords;
     }
 
     public void deleteServiceRecord(int id) {

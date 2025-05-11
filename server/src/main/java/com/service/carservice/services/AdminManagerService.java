@@ -23,7 +23,7 @@ public class AdminManagerService {
     public void addAdmin(Admin admin) {
         admin.setId(adminRepository.getNextId()); // Fetch nextId from repository
         admins.add(admin);
-        adminRepository.persistToFile(admins);
+        adminRepository.addAdmin(admin);
     }
 
     public List<Admin> getAllAdmins() {

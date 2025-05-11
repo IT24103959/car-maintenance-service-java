@@ -11,6 +11,14 @@ public abstract class Vehicle {
     public Vehicle() {
     }
 
+    public Vehicle(int id, String manufacturer, String modelType, String vin, String registrationNumber) {
+        this.id = id;
+        this.manufacturer = manufacturer;
+        this.modelType = modelType;
+        this.vin = vin;
+        this.registrationNumber = registrationNumber;
+    }
+
     public Vehicle(String manufacturer, String modelType, String vin, String registrationNumber) {
         this.manufacturer = manufacturer;
         this.modelType = modelType;

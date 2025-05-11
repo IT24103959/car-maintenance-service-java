@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.service.carservice.services.ReviewManagerService;
 
 import com.service.carservice.models.Review;
-import com.service.carservice.dto.ReviewRequestDTO;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -28,8 +27,7 @@ public class ReviewController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> addReview(@RequestBody ReviewRequestDTO requestDTO) {
-        Review review = requestDTO.getReview();
+    public ResponseEntity<Void> addReview(@RequestBody Review review) {
         reviewManagerService.addReview(review);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

@@ -23,7 +23,7 @@ public class CarManagerService {
     public void addCar(Car car) {
         car.setId(carRepository.getNextId()); // Fetch nextId from repository
         cars.add(car);
-        carRepository.persistToFile(cars);
+        carRepository.addCar(car);
     }
 
     public List<Car> getAllCars() {

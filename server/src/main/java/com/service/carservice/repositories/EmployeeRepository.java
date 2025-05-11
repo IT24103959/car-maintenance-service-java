@@ -6,62 +6,61 @@ import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Repository;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.service.carservice.models.Employee;
 
 @Repository
 public class EmployeeRepository {
 
-    private static final String JSON_FILE_PATH = "src/main/resources/data/employees.json";
-    private ObjectMapper objectMapper = new ObjectMapper();
-    private int nextId;
+    private static final String FILE_PATH = "src/main/resources/data/employees.json";
+    private LinkedList<Employee> employees = new LinkedList<>();
+    private int nextId = 1;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     public EmployeeRepository() {
-        List<Employee> employees = loadEmployees(); // Directly load employees from JSON
-        this.nextId = employees.stream()
-                .mapToInt(Employee::getId)
-                .max()
-                .orElse(0) + 1;
+        loadEmployees();
+        setNextId();
     }
 
     public List<Employee> getAllEmployees() {
-        try {
-            return objectMapper.readValue(Files.readAllBytes(Paths.get(JSON_FILE_PATH)),
-                    objectMapper.getTypeFactory().constructCollectionType(LinkedList.class, Employee.class));
-        } catch (IOException e) {
-            return new LinkedList<>();
-        }
-    }
-
-    private List<Employee> loadEmployees() {
-        try {
-            return objectMapper.readValue(Files.readAllBytes(Paths.get(JSON_FILE_PATH)),
-                    objectMapper.getTypeFactory().constructCollectionType(LinkedList.class, Employee.class));
-        } catch (IOException e) {
-            return new LinkedList<>();
-        }
+        return employees;
     }
 
     public void addEmployee(Employee employee) {
-        employee.setId(nextId++); // Use nextId and increment
-        List<Employee> employees = loadEmployees();
+        employee.setId(nextId++);
         employees.add(employee);
-        persistToFile(employees);
+        persistToFile();
     }
 
     public void deleteEmployee(int id) {
-        List<Employee> employees = getAllEmployees();
         employees.removeIf(employee -> employee.getId() == id);
-        persistToFile(employees);
+        persistToFile();
     }
 
-    public void persistToFile(List<Employee> employees) {
+    private void setNextId() {
+        int maxId = employees.stream()
+                .mapToInt(Employee::getId)
+                .max()
+                .orElse(0);
+        nextId = maxId + 1;
+    }
+
+    private void loadEmployees() {
         try {
-            objectMapper.writeValue(Paths.get(JSON_FILE_PATH).toFile(), employees);
+            employees = objectMapper.readValue(Files.readAllBytes(Paths.get(FILE_PATH)),
+                    objectMapper.getTypeFactory().constructCollectionType(LinkedList.class, Employee.class));
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void persistToFile() {
+        try {
+            objectMapper.writeValue(Paths.get(FILE_PATH).toFile(), employees);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to persist employees to file", e);
         }
     }
 

@@ -1,27 +1,26 @@
 package com.service.carservice.models;
 
-import java.time.LocalDateTime;
-
 public class ServiceRecord extends Record {
     private Car car;
-    private LocalDateTime date;
+    private String date; // Replaced LocalDateTime with String for date field
     private String description;
     private int employeeId; // New attribute to link service records to employees
 
     public ServiceRecord() {
     }
 
-    public ServiceRecord(LocalDateTime date, String description, double cost) {
+    public ServiceRecord(String date, String description, double cost) {
         this.date = date;
         this.description = description;
         this.cost = cost;
     }
 
-    public ServiceRecord(int id, LocalDateTime date, String description, double cost) {
+    public ServiceRecord(int id, String date, String description, double cost, int employeeId) {
         this.id = id;
         this.date = date;
         this.description = description;
         this.cost = cost;
+        this.employeeId = employeeId;
     }
 
     public Car getCar() {
@@ -32,11 +31,11 @@ public class ServiceRecord extends Record {
         this.car = car;
     }
 
-    public LocalDateTime getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(LocalDateTime date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
@@ -48,10 +47,12 @@ public class ServiceRecord extends Record {
         this.description = description;
     }
 
+    @Override
     public void setCost(double cost) {
         this.cost = cost;
     }
 
+    @Override
     public void setCompleted(boolean completed) {
         this.completed = completed;
     }

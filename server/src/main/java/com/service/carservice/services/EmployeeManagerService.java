@@ -23,7 +23,7 @@ public class EmployeeManagerService {
     public void addEmployee(Employee employee) {
         employee.setId(employeeRepository.getNextId()); // Fetch nextId from repository
         employees.add(employee);
-        employeeRepository.persistToFile(employees);
+        employeeRepository.addEmployee(employee);
     }
 
     public List<Employee> getAllEmployees() {
@@ -32,6 +32,5 @@ public class EmployeeManagerService {
 
     public void deleteEmployee(int id) {
         employees.removeIf(employee -> employee.getId() == id);
-        employeeRepository.persistToFile(employees);
     }
 }

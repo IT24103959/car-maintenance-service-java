@@ -1,0 +1,1 @@
+[{"id":2,"cost":50.0,"completed":false,"car":{"id":2,"manufacturer":"Toyota","modelType":"Prius","vin":"xxxx","registrationNumber":"xxxx","owner":{"id":0,"name":"Ishanka","email":"ishankadsenevirathne@gmail.com","tel":"o714946943","address":"some address"},"carType":"Electric"},"date":"2025-05-26T14:30:00","description":"Oil Change","employeeId":1}]

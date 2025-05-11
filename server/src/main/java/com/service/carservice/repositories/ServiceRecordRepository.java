@@ -14,10 +14,17 @@ import java.util.List;
 public class ServiceRecordRepository {
     private static final String FILE_PATH = "src/main/resources/data/service-history.json";
     private ObjectMapper objectMapper = new ObjectMapper();
+    private int nextId;
 
     public ServiceRecordRepository() {
-        // Constructor is now empty as LinkedList management is moved to
-        // ServiceRecordService
+        List<ServiceRecord> records = loadServiceRecords();
+        int maxId = 0;
+        for (ServiceRecord record : records) {
+            if (record.getId() > maxId) {
+                maxId = record.getId();
+            }
+        }
+        nextId = maxId + 1;
     }
 
     public List<ServiceRecord> getAllServiceRecords() {
@@ -28,17 +35,16 @@ public class ServiceRecordRepository {
         persistToFile(records);
     }
 
-    public void addServiceRecord(ServiceRecord record) {
-        throw new UnsupportedOperationException("Operation moved to ServiceRecordService");
+    public void addServiceRecord(ServiceRecord newRecord) {
+        newRecord.setId(nextId++);
+        List<ServiceRecord> records = loadServiceRecords();
+        records.add(newRecord);
+        persistToFile(records);
     }
 
-    public void deleteServiceRecord(int id) {
-        throw new UnsupportedOperationException("Operation moved to ServiceRecordService");
-    }
-
-    public ServiceRecord getServiceRecordById(int id) {
+    public ServiceRecord getServiceRecordById(int recordId) {
         return loadServiceRecords().stream()
-                .filter(record -> record.getId() == id)
+                .filter(record -> record.getId() == recordId)
                 .findFirst()
                 .orElse(null);
     }
@@ -61,4 +67,9 @@ public class ServiceRecordRepository {
             e.printStackTrace();
         }
     }
+
+    public int getNextId() {
+        return nextId;
+    }
+
 }
