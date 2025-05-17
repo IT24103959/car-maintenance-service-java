@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.service.carservice.services.ReviewManagerService;
+import com.service.carservice.services.ReviewService;
 
 import com.service.carservice.models.Review;
 
@@ -20,21 +20,21 @@ import com.service.carservice.models.Review;
 @RequestMapping("/api/reviews")
 public class ReviewController {
 
-    private final ReviewManagerService reviewManagerService;
+    private final ReviewService reviewService;
 
-    public ReviewController(ReviewManagerService reviewManagerService) {
-        this.reviewManagerService = reviewManagerService;
+    public ReviewController(ReviewService reviewService) {
+        this.reviewService = reviewService;
     }
 
     @PostMapping
     public ResponseEntity<Void> addReview(@RequestBody Review review) {
-        reviewManagerService.addReview(review);
+        reviewService.addReview(review);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping
     public ResponseEntity<List<Review>> getReviews() {
-        List<Review> reviews = reviewManagerService.getReviews();
+        List<Review> reviews = reviewService.getAll();
         return new ResponseEntity<>(reviews, HttpStatus.OK);
     }
 }

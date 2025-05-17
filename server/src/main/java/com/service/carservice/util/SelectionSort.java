@@ -2,21 +2,22 @@ package com.service.carservice.util;
 
 import com.service.carservice.models.ServiceRecord;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class SelectionSort {
 
-    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ISO_DATE;
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
     public static void sortAscending(List<ServiceRecord> serviceRecords) {
         int n = serviceRecords.size();
         for (int i = 0; i < n - 1; i++) {
             int minIndex = i;
             for (int j = i + 1; j < n; j++) {
-                LocalDate dateJ = LocalDate.parse(serviceRecords.get(j).getDate(), DATE_FORMATTER);
-                LocalDate dateMin = LocalDate.parse(serviceRecords.get(minIndex).getDate(), DATE_FORMATTER);
+                LocalDateTime dateJ = LocalDateTime.parse(serviceRecords.get(j).getDate(), DATE_TIME_FORMATTER);
+                LocalDateTime dateMin = LocalDateTime.parse(serviceRecords.get(minIndex).getDate(),
+                        DATE_TIME_FORMATTER);
                 if (dateJ.isBefore(dateMin)) {
                     minIndex = j;
                 }
@@ -34,8 +35,9 @@ public class SelectionSort {
         for (int i = 0; i < n - 1; i++) {
             int maxIndex = i;
             for (int j = i + 1; j < n; j++) {
-                LocalDate dateJ = LocalDate.parse(serviceRecords.get(j).getDate(), DATE_FORMATTER);
-                LocalDate dateMax = LocalDate.parse(serviceRecords.get(maxIndex).getDate(), DATE_FORMATTER);
+                LocalDateTime dateJ = LocalDateTime.parse(serviceRecords.get(j).getDate(), DATE_TIME_FORMATTER);
+                LocalDateTime dateMax = LocalDateTime.parse(serviceRecords.get(maxIndex).getDate(),
+                        DATE_TIME_FORMATTER);
                 if (dateJ.isAfter(dateMax)) {
                     maxIndex = j;
                 }

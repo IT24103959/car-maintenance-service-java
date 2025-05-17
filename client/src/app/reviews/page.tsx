@@ -26,19 +26,36 @@ export default function ReviewsPage() {
       const response = await fetch("http://localhost:8080/api/reviews");
       const data = await response.json();
 
-      // Map the response to match the Review interface
-      const mappedReviews = data.map((review: any) => ({
-        reviewText: review.reviewText,
-        rating: review.rating,
-        serviceDate: review.serviceRecord?.date || "N/A",
-        carDetails: `${review.serviceRecord?.car?.manufacturer || "Unknown"} ${
-          review.serviceRecord?.car?.modelType || "Unknown"
-        } (${review.serviceRecord?.car?.carType || "Unknown"})`,
-        ownerName: review.serviceRecord?.car?.owner?.name || "Unknown",
-        ownerEmail: review.serviceRecord?.car?.owner?.email || "Unknown",
-      }));
+      // For each review, fetch the service record using serviceId
+      const reviewsWithService = await Promise.all(
+        data.map(async (review: any) => {
+          let serviceRecord = null;
+          try {
+            const serviceRes = await fetch(
+              `http://localhost:8080/api/service-records/${review.serviceId}`
+            );
+            if (serviceRes.ok) {
+              serviceRecord = await serviceRes.json();
+            }
+          } catch (e) {
+            // If fetching service record fails, leave as null
+          }
 
-      setReviews(mappedReviews);
+          return {
+            reviewText: review.reviewText,
+            rating: review.rating,
+            serviceId: review.serviceId,
+            serviceDate: serviceRecord?.date || "N/A",
+            carDetails: `${serviceRecord?.car?.manufacturer || "Unknown"} ${
+              serviceRecord?.car?.modelType || "Unknown"
+            } (${serviceRecord?.car?.carType || "Unknown"})`,
+            ownerName: serviceRecord?.car?.owner?.name || "Unknown",
+            ownerEmail: serviceRecord?.car?.owner?.email || "Unknown",
+          };
+        })
+      );
+
+      setReviews(reviewsWithService);
     } catch (error) {
       console.error("Error fetching reviews:", error);
     }

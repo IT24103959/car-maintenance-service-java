@@ -37,7 +37,7 @@ export default function Page() {
   const fetchServices = async (order = "asc") => {
     try {
       const response = await fetch(
-        `http://localhost:8080/api/service-records/sorted?order=${order}`
+        `http://localhost:8080/api/service-records?order=${order}`
       );
       const data = await response.json();
       setServices(data);

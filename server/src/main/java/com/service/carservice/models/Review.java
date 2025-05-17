@@ -4,8 +4,9 @@ public class Review {
     private int serviceId; // Replacing ServiceRecord object with serviceId
     String reviewText;
     int rating;
+    int id;
 
-    public Review(){
+    public Review() {
 
     }
 
@@ -34,5 +35,13 @@ public class Review {
 
     public String getReviewText() {
         return reviewText;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
     }
 }

@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
 import com.service.carservice.models.Employee;
-import com.service.carservice.services.EmployeeManagerService;
+import com.service.carservice.services.EmployeeService;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -16,23 +16,23 @@ import com.service.carservice.services.EmployeeManagerService;
 public class EmployeeController {
 
     @Autowired
-    private EmployeeManagerService employeeManagerService;
+    private EmployeeService employeeService;
 
     @GetMapping
     public ResponseEntity<List<Employee>> getEmployees() {
-        List<Employee> employees = employeeManagerService.getAllEmployees();
+        List<Employee> employees = employeeService.getAll();
         return new ResponseEntity<>(employees, HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<Void> addEmployee(@RequestBody Employee employee) {
-        employeeManagerService.addEmployee(employee);
+        employeeService.addEmployee(employee);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteEmployee(@PathVariable int id) {
-        employeeManagerService.deleteEmployee(id);
+        employeeService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
