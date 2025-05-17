@@ -1,40 +1,45 @@
 package com.service.carservice.controllers;
 
-import java.util.List;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.service.carservice.services.ReviewService;
-
 import com.service.carservice.models.Review;
 
-@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/reviews")
-public class ReviewController {
+public class ReviewController extends BaseController<Review> {
 
-    private final ReviewService reviewService;
+    @Autowired
+    private ReviewService reviewService;
 
-    public ReviewController(ReviewService reviewService) {
-        this.reviewService = reviewService;
+    @GetMapping
+    public ResponseEntity<Review[]> getReviews() {
+        return response(reviewService.getAll(), Review.class);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Review> getReviewById(@PathVariable int id) {
+        return response(reviewService.getById(id));
     }
 
     @PostMapping
     public ResponseEntity<Void> addReview(@RequestBody Review review) {
         reviewService.addReview(review);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return response(HttpStatus.CREATED);
     }
 
-    @GetMapping
-    public ResponseEntity<List<Review>> getReviews() {
-        List<Review> reviews = reviewService.getAll();
-        return new ResponseEntity<>(reviews, HttpStatus.OK);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteReview(@PathVariable int id) {
+        reviewService.deleteById(id);
+        return response(HttpStatus.NO_CONTENT);
     }
 }

@@ -1,22 +1,22 @@
 package com.service.carservice.services;
 
-import java.util.LinkedList;
-import java.util.List;
+import com.service.carservice.util.LinkedList;
 import org.springframework.beans.factory.DisposableBean;
 
 public abstract class BaseService<T> implements DisposableBean {
     protected final LinkedList<T> items;
 
-    protected BaseService(List<T> initialItems) {
-        this.items = new LinkedList<>(initialItems);
+    protected BaseService(LinkedList<T> initialItems) {
+        this.items = initialItems;
     }
 
-    public List<T> getAll() {
+    public LinkedList<T> getAll() {
         return items;
     }
 
     public T getById(int id) {
-        for (T item : items) {
+        for (int i = 0; i < items.size(); i++) {
+            T item = items.get(i);
             if (getId(item) == id) {
                 return item;
             }

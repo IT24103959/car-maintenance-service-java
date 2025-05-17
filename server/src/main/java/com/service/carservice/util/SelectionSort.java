@@ -4,13 +4,12 @@ import com.service.carservice.models.ServiceRecord;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 public class SelectionSort {
 
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
-    public static void sortAscending(List<ServiceRecord> serviceRecords) {
+    public static void sortAscending(LinkedList<ServiceRecord> serviceRecords) {
         int n = serviceRecords.size();
         for (int i = 0; i < n - 1; i++) {
             int minIndex = i;
@@ -30,7 +29,7 @@ public class SelectionSort {
         }
     }
 
-    public static void sortDescending(List<ServiceRecord> serviceRecords) {
+    public static void sortDescending(LinkedList<ServiceRecord> serviceRecords) {
         int n = serviceRecords.size();
         for (int i = 0; i < n - 1; i++) {
             int maxIndex = i;

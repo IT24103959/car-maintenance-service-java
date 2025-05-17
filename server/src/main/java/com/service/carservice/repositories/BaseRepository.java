@@ -1,13 +1,15 @@
 package com.service.carservice.repositories;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.service.carservice.util.LinkedList;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.LinkedList;
-import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class BaseRepository<T> {
+    private static final Logger logger = LoggerFactory.getLogger(BaseRepository.class);
     protected int nextId = 1;
     protected final LinkedList<T> items = new LinkedList<>();
     protected final ObjectMapper objectMapper = new ObjectMapper();
@@ -22,25 +24,43 @@ public abstract class BaseRepository<T> {
 
     protected void loadFromFile() {
         try {
-            List<T> loaded = objectMapper.readValue(Files.readAllBytes(Paths.get(getFilePath())),
-                    objectMapper.getTypeFactory().constructCollectionType(LinkedList.class, getTypeClass()));
-            items.clear();
-            items.addAll(loaded);
-            nextId = items.stream().mapToInt(this::getId).max().orElse(0) + 1;
+            if (Files.exists(Paths.get(getFilePath()))) {
+                T[] data = objectMapper.readValue(
+                        Files.readAllBytes(Paths.get(getFilePath())),
+                        objectMapper.getTypeFactory().constructArrayType(getTypeClass()));
+
+                for (T record : data) {
+                    items.add(record);
+                }
+            }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Error loading data from file", e);
         }
     }
 
-    public void persistToFile(List<T> items) {
-        try {
-            objectMapper.writeValue(Paths.get(getFilePath()).toFile(), items);
-        } catch (IOException e) {
-            e.printStackTrace();
+    public void persistToFile(LinkedList<T> items) {
+        if (items != null && items.size() > 0) {
+            try {
+                // Extract only the instance property from each Link and write as array
+                T[] data = (T[]) java.lang.reflect.Array.newInstance(getTypeClass(), items.size());
+                for (int i = 0; i < items.size(); i++) {
+                    data[i] = items.get(i);
+                }
+                objectMapper.writeValue(Paths.get(getFilePath()).toFile(), data);
+            } catch (IOException e) {
+                logger.error("Error persisting data to file", e);
+            }
+        } else {
+            try {
+                // Write empty array if items is null or empty
+                objectMapper.writeValue(Paths.get(getFilePath()).toFile(), new Object[0]);
+            } catch (IOException e) {
+                logger.error("Error persisting empty data to file", e);
+            }
         }
     }
 
-    public List<T> getAll() {
+    public LinkedList<T> getAll() {
         return items;
     }
 

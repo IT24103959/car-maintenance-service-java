@@ -1,13 +1,12 @@
 package com.service.carservice.services;
 
-import java.util.List;
-
 import org.springframework.stereotype.Service;
 
 import com.service.carservice.dto.ServiceRecordRequestDTO;
 import com.service.carservice.models.Car;
 import com.service.carservice.models.ServiceRecord;
 import com.service.carservice.repositories.ServiceRecordRepository;
+import com.service.carservice.util.LinkedList;
 import com.service.carservice.util.SelectionSort;
 
 @Service
@@ -19,7 +18,7 @@ public class ServiceRecordService extends BaseService<ServiceRecord> {
         this.serviceRecordRepository = serviceRecordRepository;
     }
 
-    public List<ServiceRecord> getAll(String order) {
+    public LinkedList<ServiceRecord> getAll(String order) {
         if (order.equalsIgnoreCase("asc")) {
             SelectionSort.sortAscending(items);
         } else {

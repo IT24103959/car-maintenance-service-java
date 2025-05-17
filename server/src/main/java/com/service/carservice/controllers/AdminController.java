@@ -1,11 +1,8 @@
 package com.service.carservice.controllers;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,30 +14,32 @@ import org.springframework.web.bind.annotation.RestController;
 import com.service.carservice.models.Admin;
 import com.service.carservice.services.AdminService;
 
-@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/admins")
-public class AdminController {
+public class AdminController extends BaseController<Admin> {
 
     @Autowired
     private AdminService adminService;
 
     @GetMapping
-    public ResponseEntity<List<Admin>> getAdmins() {
-        List<Admin> admins = adminService.getAll();
+    public ResponseEntity<Admin[]> getAdmins() {
+        return response(adminService.getAll(), Admin.class);
+    }
 
-        return new ResponseEntity<>(admins, HttpStatus.OK);
+    @GetMapping("/{id}")
+    public ResponseEntity<Admin> getAdminById(@PathVariable int id) {
+        return response(adminService.getById(id));
     }
 
     @PostMapping
     public ResponseEntity<Void> addAdmin(@RequestBody Admin admin) {
         adminService.addAdmin(admin);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return response(HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAdmin(@PathVariable int id) {
         adminService.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return response(HttpStatus.NO_CONTENT);
     }
 }
