@@ -1,8 +1,9 @@
 package com.service.carservice.services;
 
+import org.springframework.stereotype.Service;
+
 import com.service.carservice.models.Admin;
 import com.service.carservice.repositories.AdminRepository;
-import org.springframework.stereotype.Service;
 
 @Service
 public class AdminService extends BaseService<Admin> {
@@ -23,6 +24,7 @@ public class AdminService extends BaseService<Admin> {
     }
 
     public boolean updateAdminById(int id, Admin updatedAdmin) {
+        updatedAdmin.setId(id);
         return updateById(id, updatedAdmin);
     }
 

@@ -23,6 +23,7 @@ public class EmployeeService extends BaseService<Employee> {
     }
 
     public boolean updateEmployeeById(int id, Employee updatedEmployee) {
+        updatedEmployee.setId(id);
         return updateById(id, updatedEmployee);
     }
 

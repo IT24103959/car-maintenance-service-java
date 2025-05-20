@@ -75,26 +75,6 @@ public class LinkedList<T> {
         size = 0;
     }
 
-    public java.util.Iterator<T> iterator() {
-        return new java.util.Iterator<T>() {
-            private Link<T> current = head;
-
-            @Override
-            public boolean hasNext() {
-                return current != null;
-            }
-
-            @Override
-            public T next() {
-                if (!hasNext())
-                    throw new java.util.NoSuchElementException();
-                T value = current.instance;
-                current = current.next;
-                return value;
-            }
-        };
-    }
-
     public void set(int index, T value) {
         if (index < 0 || index >= size)
             throw new IndexOutOfBoundsException();

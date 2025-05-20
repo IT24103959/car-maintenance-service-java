@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 interface Car {
+  id: number;
   carType: string;
   manufacturer: string;
   modelType: string;
@@ -32,6 +33,20 @@ export default function CarsPage() {
     router.push("/vehicles/addNewCar");
   };
 
+  // Delete car by index (assuming backend returns cars in same order)
+  const handleDeleteCar = async (id: number) => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/cars/${id}`, {
+        method: "DELETE",
+      });
+      if (response.ok) {
+        fetchCars(); // Refresh the cars list
+      }
+    } catch (error) {
+      console.error("Error deleting car:", error);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-slate-900 flex flex-col items-center py-8 pt-20">
       <div className="w-4/5 flex justify-between mb-4">
@@ -51,14 +66,23 @@ export default function CarsPage() {
             <th className="py-2 px-4">Car Type</th>
             <th className="py-2 px-4">Manufacturer</th>
             <th className="py-2 px-4">Model</th>
+            <th className="py-2 px-4">Actions</th>
           </tr>
         </thead>
         <tbody>
-          {cars.map((car, index) => (
-            <tr key={index} className="border-b">
+          {cars.map((car, _) => (
+            <tr key={car.id} className="border-b">
               <td className="py-2 px-4">{car.carType}</td>
               <td className="py-2 px-4">{car.manufacturer}</td>
               <td className="py-2 px-4">{car.modelType}</td>
+              <td className="py-2 px-4">
+                <button
+                  onClick={() => handleDeleteCar(car.id)}
+                  className="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600"
+                >
+                  Delete
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>

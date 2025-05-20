@@ -95,7 +95,7 @@ export default function AdminPage() {
                   Delete
                 </button>
                 <button
-                  onClick={() => router.push(`/admin/editAdmin/${admin.id}`)}
+                  onClick={() => router.push(`/admin/editAdmin?id=${admin.id}`)}
                   className="bg-yellow-500 text-white py-1 px-3 rounded hover:bg-yellow-600 ml-2"
                 >
                   Edit

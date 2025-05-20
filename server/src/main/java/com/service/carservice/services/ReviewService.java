@@ -24,6 +24,7 @@ public class ReviewService extends BaseService<Review> {
     }
 
     public boolean updateReviewById(int id, Review updatedReview) {
+        updatedReview.setId(id);
         return updateById(id, updatedReview);
     }
 

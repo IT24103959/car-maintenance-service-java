@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.service.carservice.dto.ServiceRecordRequestDTO;
@@ -25,8 +26,8 @@ public class ServiceController extends BaseController<ServiceRecord> {
     private ServiceRecordService serviceRecordService;
 
     @GetMapping
-    public ResponseEntity<ServiceRecord[]> getServices() {
-        return response(serviceRecordService.getAll(), ServiceRecord.class);
+    public ResponseEntity<ServiceRecord[]> getServices(@RequestParam String order) {
+        return response(serviceRecordService.getAll(order), ServiceRecord.class);
     }
 
     @GetMapping("/{id}")

@@ -7,6 +7,7 @@ import { HiOutlineMail } from "react-icons/hi"; // Import email icon
 import { BsPerson } from "react-icons/bs"; // Import person icon
 
 interface Review {
+  id: number;
   reviewText: string;
   rating: number;
   serviceId: number;
@@ -42,6 +43,7 @@ export default function ReviewsPage() {
           }
 
           return {
+            id: review.id,
             reviewText: review.reviewText,
             rating: review.rating,
             serviceId: review.serviceId,
@@ -67,6 +69,23 @@ export default function ReviewsPage() {
 
   const handleCreateReview = () => {
     router.push("/reviews/addNewReview");
+  };
+
+  const handleEditReview = (id: number) => {
+    router.push(`/reviews/editReview?serviceId=${id}`);
+  };
+
+  const handleDeleteReview = async (id: number) => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/reviews/${id}`, {
+        method: "DELETE",
+      });
+      if (response.ok) {
+        fetchReviews(); // Refresh the reviews list
+      }
+    } catch (error) {
+      console.error("Error deleting review:", error);
+    }
   };
 
   return (
@@ -133,6 +152,20 @@ export default function ReviewsPage() {
               <BsPerson className="text-cyan-500 text-2xl mr-2" />
               <span className="font-semibold"></span> {review.ownerName}
             </p>
+            <div className="flex space-x-2 mt-2">
+              <button
+                onClick={() => handleEditReview(review.id)}
+                className="bg-yellow-500 text-white py-1 px-3 rounded hover:bg-yellow-600"
+              >
+                Edit
+              </button>
+              <button
+                onClick={() => handleDeleteReview(review.id)}
+                className="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600"
+              >
+                Delete
+              </button>
+            </div>
           </div>
         ))}
       </div>

@@ -1,7 +1,8 @@
 package com.service.carservice.services;
 
-import com.service.carservice.util.LinkedList;
 import org.springframework.beans.factory.DisposableBean;
+
+import com.service.carservice.util.LinkedList;
 
 public abstract class BaseService<T> implements DisposableBean {
     protected final LinkedList<T> items;

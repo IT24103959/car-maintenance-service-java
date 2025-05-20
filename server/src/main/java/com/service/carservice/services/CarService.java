@@ -28,6 +28,7 @@ public class CarService extends BaseService<Car> {
     }
 
     public boolean updateCarById(int id, Car updatedCar) {
+        updatedCar.setId(id);
         return updateById(id, updatedCar);
     }
 
