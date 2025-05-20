@@ -1,12 +1,14 @@
 package com.service.carservice.repositories;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.service.carservice.util.LinkedList;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.service.carservice.util.LinkedList;
 
 public abstract class BaseRepository<T> {
     private static final Logger logger = LoggerFactory.getLogger(BaseRepository.class);
@@ -20,6 +22,7 @@ public abstract class BaseRepository<T> {
 
     public BaseRepository() {
         loadFromFile();
+        setNextId();
     }
 
     protected void loadFromFile() {
@@ -69,6 +72,20 @@ public abstract class BaseRepository<T> {
         if (increment)
             nextId++;
         return id;
+    }
+
+    private void setNextId() {
+        int maxId = 0;
+
+        for (int i = 0; i < items.size(); i++) {
+            T item = items.get(i);
+            int id = getId(item);
+            if (id > maxId) {
+                maxId = id;
+            }
+        }
+
+        nextId = maxId + 1;
     }
 
     protected abstract int getId(T item);
