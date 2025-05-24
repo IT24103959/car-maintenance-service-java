@@ -12,7 +12,7 @@ import com.service.carservice.util.SelectionSort;
 @Service
 public class ServiceRecordService extends BaseService {
     private final ServiceRecordRepository serviceRecordRepository;
-    private ServiceRecordList items = new ServiceRecordList();
+    private ServiceRecordList items;
 
     public ServiceRecordService(ServiceRecordRepository serviceRecordRepository) {
         this.items = serviceRecordRepository.getAll();

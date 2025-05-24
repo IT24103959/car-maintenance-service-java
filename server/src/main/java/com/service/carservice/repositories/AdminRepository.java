@@ -1,0 +1,64 @@
+package com.service.carservice.repositories;
+
+import com.service.carservice.cache.AdminList;
+import com.service.carservice.models.Admin;
+import org.springframework.stereotype.Repository;
+
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
+@Repository
+public class AdminRepository extends BaseRepository {
+    private static final String FILE_PATH = "src/main/resources/data/admins.json";
+    private final AdminList items = new AdminList();
+
+    public AdminRepository() {
+        super();
+    }
+
+    public void loadFromFile() {
+        try {
+            if (Files.exists(Paths.get(getFilePath()))) {
+                Admin[] data = objectMapper.readValue(
+                        Files.readAllBytes(Paths.get(getFilePath())),
+                        objectMapper.getTypeFactory().constructArrayType(Admin.class));
+
+                for (Admin record : data) {
+                    items.insert(record);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void persistToFile(AdminList items) {
+        if (items != null && items.getSize() > 0) {
+            try {
+                Admin[] data = items.toArray();
+                objectMapper.writeValue(Paths.get(getFilePath()).toFile(), data);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void setNextId() {
+        int maxId = 0;
+        Admin[] data = items.toArray();
+        for (Admin record : data) {
+            int id = record.getId();
+            if (id > maxId) {
+                maxId = id;
+            }
+        }
+        nextId = maxId + 1;
+    }
+
+    public AdminList getAll(){
+        return items;
+    }
+
+}
