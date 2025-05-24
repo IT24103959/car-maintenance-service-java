@@ -14,6 +14,11 @@ public class ReviewService extends BaseService<Review> {
         this.reviewRepository = reviewRepository;
     }
 
+    public Review[] getAllReviews() {
+        Review[] itemsArr = new Review[items.size()];
+        return itemsArr;
+    }
+
     public void addReview(Review review) {
         review.setId(reviewRepository.getNextId(true));
         items.add(review);

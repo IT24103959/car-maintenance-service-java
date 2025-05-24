@@ -27,6 +27,12 @@ public class ServiceRecordService extends BaseService<ServiceRecord> {
         return items;
     }
 
+    public ServiceRecord[] getAllServiceRecords(String order) {
+        LinkedList<ServiceRecord> itemsData = getAll(order);
+        ServiceRecord[] itemsArr = new ServiceRecord[itemsData.size()];
+        return itemsArr;
+    }
+
     public void addServiceRecord(ServiceRecordRequestDTO requestDTO) {
         ServiceRecord newRecord = requestDTO.getServiceRecord();
         Car car = requestDTO.getCar();

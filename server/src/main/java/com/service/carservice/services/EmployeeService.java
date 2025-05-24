@@ -18,6 +18,11 @@ public class EmployeeService extends BaseService<Employee> {
         items.add(employee);
     }
 
+    public Employee[] getAllEmployees() {
+        Employee[] itemsArr = new Employee[items.size()];
+        return itemsArr;
+    }
+
     public Employee getEmployeeById(int id) {
         return getById(id);
     }

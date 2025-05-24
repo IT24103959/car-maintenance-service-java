@@ -14,6 +14,11 @@ public class AdminService extends BaseService<Admin> {
         this.adminRepository = adminRepository;
     }
 
+    public Admin[] getAllAdmins() {
+        Admin[] itemsArr = new Admin[items.size()];
+        return itemsArr;
+    }
+
     public void addAdmin(Admin admin) {
         admin.setId(adminRepository.getNextId(true));
         items.add(admin);

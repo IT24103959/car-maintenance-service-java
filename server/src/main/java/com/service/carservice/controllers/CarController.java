@@ -16,31 +16,31 @@ import com.service.carservice.services.CarService;
 
 @RestController
 @RequestMapping("/api/cars")
-public class CarController extends BaseController<Car> {
+public class CarController {
 
     @Autowired
     private CarService carService;
 
     @GetMapping
     public ResponseEntity<Car[]> getCars() {
-        return response(carService.getAll(), Car.class);
+        return new ResponseEntity<>(carService.getAllCars(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Car> getCarById(@PathVariable int id) {
-        return response(carService.getById(id));
+        return new ResponseEntity<>(carService.getById(id), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<Void> addCar(@RequestBody Car car) {
         carService.addCar(car);
-        return response(HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCar(@PathVariable int id) {
         carService.deleteById(id);
-        return response(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }

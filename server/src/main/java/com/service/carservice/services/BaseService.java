@@ -36,7 +36,10 @@ public abstract class BaseService<T> implements DisposableBean {
     }
 
     public void deleteById(int id) {
-        items.removeIf(item -> getId(item) == id);
+        T itemToDelete = getById(id);
+        if (itemToDelete != null) {
+            items.remove(itemToDelete);
+        }
     }
 
     protected abstract int getId(T item);

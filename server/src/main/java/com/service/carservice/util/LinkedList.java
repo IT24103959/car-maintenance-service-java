@@ -85,32 +85,6 @@ public class LinkedList<T> {
         current.instance = value;
     }
 
-    public void removeIf(java.util.function.Predicate<T> filter) {
-        // Remove from head while head matches
-        while (head != null && filter.test(head.instance)) {
-            head = head.next;
-            size--;
-        }
-        // Remove from rest
-        Link<T> current = head;
-        while (current != null && current.next != null) {
-            if (filter.test(current.next.instance)) {
-                current.next = current.next.next;
-                size--;
-            } else {
-                current = current.next;
-            }
-        }
-    }
-
-    /**
-     * Returns an array of the instance data for JSON serialization (for HTTP
-     * response).
-     * If the list is empty, returns an empty array.
-     *
-     * @param clazz The class of the model (e.g., Admin.class)
-     * @return array of T
-     */
     public T[] modelDumpJson(Class<T> clazz) {
         @SuppressWarnings("unchecked")
         T[] arr = (T[]) java.lang.reflect.Array.newInstance(clazz, size);
@@ -119,4 +93,5 @@ public class LinkedList<T> {
         }
         return arr;
     }
+
 }

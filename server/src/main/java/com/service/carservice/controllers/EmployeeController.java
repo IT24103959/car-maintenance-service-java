@@ -10,31 +10,31 @@ import com.service.carservice.services.EmployeeService;
 
 @RestController
 @RequestMapping("/api/employees")
-public class EmployeeController extends BaseController<Employee> {
+public class EmployeeController {
 
     @Autowired
     private EmployeeService employeeService;
 
     @GetMapping
     public ResponseEntity<Employee[]> getEmployees() {
-        return response(employeeService.getAll(), Employee.class);
+        return new ResponseEntity<>(employeeService.getAllEmployees(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Employee> getEmployeeById(@PathVariable int id) {
-        return response(employeeService.getById(id));
+        return new ResponseEntity<>(employeeService.getById(id), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<Void> addEmployee(@RequestBody Employee employee) {
         employeeService.addEmployee(employee);
-        return response(HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteEmployee(@PathVariable int id) {
         employeeService.deleteById(id);
-        return response(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }

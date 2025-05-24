@@ -18,6 +18,11 @@ public class CarService extends BaseService<Car> {
         items.add(car);
     }
 
+    public Car[] getAllCars() {
+        Car[] itemsArr = new Car[items.size()];
+        return itemsArr;
+    }
+
     @Override
     protected int getId(Car car) {
         return car.getId();

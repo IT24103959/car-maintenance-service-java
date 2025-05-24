@@ -17,39 +17,39 @@ import com.service.carservice.services.ReviewService;
 
 @RestController
 @RequestMapping("/api/reviews")
-public class ReviewController extends BaseController<Review> {
+public class ReviewController {
 
     @Autowired
     private ReviewService reviewService;
 
     @GetMapping
     public ResponseEntity<Review[]> getReviews() {
-        return response(reviewService.getAll(), Review.class);
+        return new ResponseEntity<>(reviewService.getAllReviews(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Review> getReviewById(@PathVariable int id) {
-        return response(reviewService.getById(id));
+        return new ResponseEntity<>(reviewService.getById(id), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<Void> addReview(@RequestBody Review review) {
         reviewService.addReview(review);
-        return response(HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateReview(@PathVariable int id, @RequestBody Review updatedReview) {
         if (reviewService.updateReviewById(id, updatedReview)) {
-            return response(HttpStatus.NO_CONTENT);
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
         } else {
-            return response(HttpStatus.NOT_FOUND);
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteReview(@PathVariable int id) {
         reviewService.deleteById(id);
-        return response(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

@@ -20,31 +20,31 @@ import com.service.carservice.services.ServiceRecordService;
 
 @RestController
 @RequestMapping("/api/service-records")
-public class ServiceController extends BaseController<ServiceRecord> {
+public class ServiceController {
 
     @Autowired
     private ServiceRecordService serviceRecordService;
 
     @GetMapping
     public ResponseEntity<ServiceRecord[]> getServices(@RequestParam String order) {
-        return response(serviceRecordService.getAll(order), ServiceRecord.class);
+        return new ResponseEntity<>(serviceRecordService.getAllServiceRecords(order), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ServiceRecord> getServiceById(@PathVariable int id) {
-        return response(serviceRecordService.getById(id));
+        return new ResponseEntity<>(serviceRecordService.getById(id), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<Void> addService(@RequestBody ServiceRecordRequestDTO serviceRecord) {
         serviceRecordService.addServiceRecord(serviceRecord);
-        return response(HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteService(@PathVariable int id) {
         serviceRecordService.deleteById(id);
-        return response(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}")
@@ -53,13 +53,13 @@ public class ServiceController extends BaseController<ServiceRecord> {
         try {
             ServiceRecord updatedRecord = serviceRecordService.updateServiceRecord(id, requestDTO);
             if (updatedRecord == null) {
-                return response(null, HttpStatus.NOT_FOUND);
+                return new ResponseEntity(null, HttpStatus.NOT_FOUND);
             }
 
-            return response(updatedRecord, HttpStatus.OK);
+            return new ResponseEntity<>(updatedRecord, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            return response(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -67,8 +67,8 @@ public class ServiceController extends BaseController<ServiceRecord> {
     public ResponseEntity<ServiceRecord> completeServiceRecord(@PathVariable int id) {
         ServiceRecord serviceRecord = serviceRecordService.completeServiceRecord(id);
         if (serviceRecord == null) {
-            return response(null, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return response(serviceRecord, HttpStatus.OK);
+        return new ResponseEntity<>(serviceRecord, HttpStatus.OK);
     }
 }
