@@ -1,5 +1,6 @@
 package com.service.carservice.repositories;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.service.carservice.cache.EmployeeList;
 import com.service.carservice.models.Employee;
 import org.springframework.stereotype.Repository;
@@ -10,19 +11,31 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 @Repository
-public class EmployeeRepository extends BaseRepository {
+public class EmployeeRepository {
     private static final String FILE_PATH = "src/main/resources/data/employees.json";
     private final EmployeeList items = new EmployeeList();
+    private int nextId;
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
 
     public EmployeeRepository() {
-        super();
+        loadFromFile();
+        setNextId();
+    }
+
+    public int getNextId(boolean increment){
+        int id = nextId;
+        if(increment){
+            nextId++;
+        }
+        return id;
     }
 
     public void loadFromFile() {
         try {
-            if (Files.exists(Paths.get(getFilePath()))) {
+            if (Files.exists(Paths.get(FILE_PATH))) {
                 Employee[] data = objectMapper.readValue(
-                        Files.readAllBytes(Paths.get(getFilePath())),
+                        Files.readAllBytes(Paths.get(FILE_PATH)),
                         objectMapper.getTypeFactory().constructArrayType(Employee.class));
 
                 for (Employee record : data) {
@@ -38,7 +51,7 @@ public class EmployeeRepository extends BaseRepository {
         if (items != null && items.getSize() > 0) {
             try {
                 Employee[] data = items.toArray();
-                objectMapper.writeValue(Paths.get(getFilePath()).toFile(), data);
+                objectMapper.writeValue(Paths.get(FILE_PATH).toFile(), data);
             } catch (IOException e) {
                 e.printStackTrace();
             }

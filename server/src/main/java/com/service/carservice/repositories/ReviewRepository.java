@@ -1,5 +1,6 @@
 package com.service.carservice.repositories;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.service.carservice.cache.ReviewList;
 import com.service.carservice.models.Review;
 import org.springframework.stereotype.Repository;
@@ -10,19 +11,32 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 @Repository
-public class ReviewRepository extends BaseRepository {
+public class ReviewRepository {
     private static final String FILE_PATH = "src/main/resources/data/reviews.json";
     private final ReviewList items = new ReviewList();
+    private int nextId;
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
 
     public ReviewRepository() {
-        super();
+        loadFromFile();
+        setNextId();
     }
+
+    public int getNextId(boolean increment){
+        int id = nextId;
+        if(increment){
+            nextId++;
+        }
+        return id;
+    }
+
 
     public void loadFromFile() {
         try {
-            if (Files.exists(Paths.get(getFilePath()))) {
+            if (Files.exists(Paths.get(FILE_PATH))) {
                 Review[] data = objectMapper.readValue(
-                        Files.readAllBytes(Paths.get(getFilePath())),
+                        Files.readAllBytes(Paths.get(FILE_PATH)),
                         objectMapper.getTypeFactory().constructArrayType(Review.class));
 
                 for (Review record : data) {
@@ -38,7 +52,7 @@ public class ReviewRepository extends BaseRepository {
         if (items != null && items.getSize() > 0) {
             try {
                 Review[] data = items.toArray();
-                objectMapper.writeValue(Paths.get(getFilePath()).toFile(), data);
+                objectMapper.writeValue(Paths.get(FILE_PATH).toFile(), data);
             } catch (IOException e) {
                 e.printStackTrace();
             }

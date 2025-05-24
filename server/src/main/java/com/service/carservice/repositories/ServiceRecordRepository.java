@@ -1,5 +1,6 @@
 package com.service.carservice.repositories;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.service.carservice.cache.ServiceRecordList;
 import com.service.carservice.models.ServiceRecord;
 import org.springframework.stereotype.Repository;
@@ -9,19 +10,31 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 @Repository
-public class ServiceRecordRepository extends BaseRepository {
+public class ServiceRecordRepository {
     private static final String FILE_PATH = "src/main/resources/data/service-history.json";
     private final ServiceRecordList items = new ServiceRecordList();
+    private int nextId;
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
 
     public ServiceRecordRepository() {
-        super();
+        loadFromFile();
+        setNextId();
+    }
+
+    public int getNextId(boolean increment){
+        int id = nextId;
+        if(increment){
+            nextId++;
+        }
+        return id;
     }
 
     public void loadFromFile() {
         try {
-            if (Files.exists(Paths.get(getFilePath()))) {
+            if (Files.exists(Paths.get(FILE_PATH))) {
                 ServiceRecord[] data = objectMapper.readValue(
-                        Files.readAllBytes(Paths.get(getFilePath())),
+                        Files.readAllBytes(Paths.get(FILE_PATH)),
                         objectMapper.getTypeFactory().constructArrayType(ServiceRecord.class));
 
                 for (ServiceRecord record : data) {
@@ -37,7 +50,7 @@ public class ServiceRecordRepository extends BaseRepository {
         if (items != null && items.getSize() > 0) {
             try {
                 ServiceRecord[] data = items.toArray();
-                objectMapper.writeValue(Paths.get(getFilePath()).toFile(), data);
+                objectMapper.writeValue(Paths.get(FILE_PATH).toFile(), data);
             } catch (IOException e) {
                 e.printStackTrace();
             }
