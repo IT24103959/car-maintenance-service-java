@@ -1,12 +1,8 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { FaLeaf, FaBell, FaChartLine } from "react-icons/fa";
-import Link from "next/link";
 
 export default function HomePage() {
-  const router = useRouter();
-
   return (
     <div className="h-screen w-screen">
       <div className="flex h-full">
@@ -27,44 +23,6 @@ export default function HomePage() {
             <br />
             <span className="text-red-500 mt-2 inline-block">Alchemist</span>
           </h1>
-          <div className="w-full max-w-sm">
-            <div className="flex space-x-4">
-              <Link
-                href="/addNewService"
-                className="flex-1 px-6 py-3 backdrop-blur-sm bg-red-500 text-white rounded hover:bg-red-600 transition shadow flex items-center"
-              >
-                <svg
-                  className="w-5 h-5 mr-2"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                New Service
-              </Link>
-              <Link
-                href="/serviceHistory"
-                className="flex-1 px-6 py-3 backdrop-blur-sm bg-gray-100 text-slate-900 rounded hover:bg-white/80 transition shadow flex items-center"
-              >
-                <svg
-                  className="w-5 h-5 mr-2"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                Service History
-              </Link>
-            </div>
-          </div>
         </div>
 
         <div className="w-1/2 bg-cover bg-center relative bg-[url(/background.jpg)]">
