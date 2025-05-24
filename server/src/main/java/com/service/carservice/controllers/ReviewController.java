@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.service.carservice.models.Review;
 import com.service.carservice.services.ReviewService;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/reviews")
 public class ReviewController {

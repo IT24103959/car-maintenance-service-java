@@ -18,6 +18,9 @@ import com.service.carservice.dto.ServiceRecordRequestDTO;
 import com.service.carservice.models.ServiceRecord;
 import com.service.carservice.services.ServiceRecordService;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/service-records")
 public class ServiceController {

@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.service.carservice.models.Car;
 import com.service.carservice.services.CarService;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/cars")
 public class CarController {
