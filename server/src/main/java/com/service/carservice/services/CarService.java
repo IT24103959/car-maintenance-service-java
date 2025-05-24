@@ -20,6 +20,9 @@ public class CarService extends BaseService<Car> {
 
     public Car[] getAllCars() {
         Car[] itemsArr = new Car[items.size()];
+        for (int i = 0; i < items.size(); i++) {
+            itemsArr[i] = items.get(i);
+        }
         return itemsArr;
     }
 

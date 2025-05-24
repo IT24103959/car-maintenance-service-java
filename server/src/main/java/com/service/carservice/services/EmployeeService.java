@@ -20,6 +20,9 @@ public class EmployeeService extends BaseService<Employee> {
 
     public Employee[] getAllEmployees() {
         Employee[] itemsArr = new Employee[items.size()];
+        for (int i = 0; i < items.size(); i++) {
+            itemsArr[i] = items.get(i);
+        }
         return itemsArr;
     }
 

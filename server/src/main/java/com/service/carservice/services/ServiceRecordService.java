@@ -30,6 +30,9 @@ public class ServiceRecordService extends BaseService<ServiceRecord> {
     public ServiceRecord[] getAllServiceRecords(String order) {
         LinkedList<ServiceRecord> itemsData = getAll(order);
         ServiceRecord[] itemsArr = new ServiceRecord[itemsData.size()];
+        for (int i = 0; i < items.size(); i++) {
+            itemsArr[i] = items.get(i);
+        }
         return itemsArr;
     }
 

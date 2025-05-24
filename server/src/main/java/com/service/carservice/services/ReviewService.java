@@ -16,6 +16,9 @@ public class ReviewService extends BaseService<Review> {
 
     public Review[] getAllReviews() {
         Review[] itemsArr = new Review[items.size()];
+        for (int i = 0; i < items.size(); i++) {
+            itemsArr[i] = items.get(i);
+        }
         return itemsArr;
     }
 
