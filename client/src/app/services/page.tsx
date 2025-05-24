@@ -36,7 +36,9 @@ export default function Page() {
   // Fetch services from the backend
   const fetchServices = async (order = "asc") => {
     try {
-      const response = await fetch(`http://localhost:8080/api/service-records`);
+      const response = await fetch(
+        `http://localhost:8080/api/service-records?order=${order}`
+      );
       const data = await response.json();
       setServices(data);
     } catch (error) {
@@ -52,17 +54,7 @@ export default function Page() {
   const handleSort = () => {
     const newOrder = sortOrder === "asc" ? "desc" : "asc";
     setSortOrder(newOrder);
-
-    // Sort services locally
-    const sortedServices = [...services].sort((a, b) => {
-      const dateA = new Date(a.date);
-      const dateB = new Date(b.date);
-      return sortOrder === "asc"
-        ? dateA.getTime() - dateB.getTime()
-        : dateB.getTime() - dateA.getTime();
-    });
-
-    setServices(sortedServices);
+    fetchServices(newOrder);
   };
 
   // Handle delete service
@@ -95,16 +87,16 @@ export default function Page() {
 
   // Redirect to the add new service page
   const handleAddNew = () => {
-    router.push("/addNewService");
+    router.push("/services/addNewService");
   };
 
   // Redirect to the edit service page
   const handleEdit = (id: number) => {
-    router.push(`/editService/${id}`);
+    router.push(`/services/editService/${id}`);
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 flex flex-col items-center py-8">
+    <div className="min-h-screen bg-slate-900 flex flex-col items-center pt-20 pb-8">
       <div className="w-4/5 flex justify-between mb-4">
         <div className="flex space-x-2">
           {/* Home Button */}
