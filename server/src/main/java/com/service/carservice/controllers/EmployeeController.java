@@ -8,9 +8,12 @@ import org.springframework.http.HttpStatus;
 import com.service.carservice.models.Employee;
 import com.service.carservice.services.EmployeeService;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/employees")
-public class EmployeeController extends BaseController {
+public class EmployeeController {
 
     @Autowired
     private EmployeeService employeeService;
