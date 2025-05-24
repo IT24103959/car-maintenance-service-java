@@ -2,7 +2,7 @@ package com.service.carservice.cache;
 
 import com.service.carservice.models.ServiceRecord;
 
-class ServiceRecordLink{
+class ServiceRecordLink {
     public ServiceRecord instance;
     public ServiceRecordLink next;
 
@@ -11,9 +11,8 @@ class ServiceRecordLink{
     }
 }
 
-public class ServiceRecordList extends BaseList{
+public class ServiceRecordList extends BaseList {
     private ServiceRecordLink first;
-
 
     public ServiceRecordList() {
         super();
@@ -25,9 +24,9 @@ public class ServiceRecordList extends BaseList{
 
         if (first == null) {
             first = newLink;
-        }else{
+        } else {
             ServiceRecordLink temp = first;
-            while(temp.next != null){
+            while (temp.next != null) {
                 temp = temp.next;
             }
             temp.next = newLink;
@@ -38,18 +37,23 @@ public class ServiceRecordList extends BaseList{
     public void deleteByValue(ServiceRecord instance) {
         ServiceRecordLink temp = first;
         ServiceRecordLink prev = null;
-        while(temp != null){
+        while (temp != null && temp.instance != instance) {
             prev = temp;
-            if(temp.instance.getId() == instance.getId()){
-                prev.next = temp.next;
-                size--;
-                return;
-            }
             temp = temp.next;
+        }
+        if (temp == null) {
+            return; // Value not found
+        }
+        if (prev == null) {
+            first = temp.next; // Deleting the first element
+            size--;
+        } else {
+            prev.next = temp.next; // Bypass the deleted
+            size--;
         }
     }
 
-    public ServiceRecord[] toArray(){
+    public ServiceRecord[] toArray() {
         ServiceRecordLink temp = first;
 
         ServiceRecord[] data = new ServiceRecord[size];
@@ -80,10 +84,9 @@ public class ServiceRecordList extends BaseList{
         current.instance = instance;
     }
 
-    public void clean(){
+    public void clean() {
         first = null;
         size = 0;
     }
-
 
 }

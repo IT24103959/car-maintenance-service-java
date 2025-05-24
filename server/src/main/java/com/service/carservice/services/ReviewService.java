@@ -1,8 +1,8 @@
 package com.service.carservice.services;
 
-import com.service.carservice.cache.ReviewList;
 import org.springframework.stereotype.Service;
 
+import com.service.carservice.cache.ReviewList;
 import com.service.carservice.models.Review;
 import com.service.carservice.repositories.ReviewRepository;
 
@@ -40,7 +40,7 @@ public class ReviewService extends BaseService {
         return false;
     }
 
-    public Review getById(int id){
+    public Review getById(int id) {
         for (int i = 0; i < items.getSize(); i++) {
             Review item = items.getByIndex(i);
             if (item.getId() == id) {
@@ -58,8 +58,6 @@ public class ReviewService extends BaseService {
     public Review[] getAll() {
         return items.toArray();
     }
-
-
 
     protected void persistOnShutdown() {
         reviewRepository.persistToFile(items);

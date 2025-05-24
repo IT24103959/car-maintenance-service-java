@@ -2,7 +2,7 @@ package com.service.carservice.cache;
 
 import com.service.carservice.models.Review;
 
-class ReviewLink{
+class ReviewLink {
     public Review instance;
     public ReviewLink next;
 
@@ -11,9 +11,8 @@ class ReviewLink{
     }
 }
 
-public class ReviewList extends BaseList{
+public class ReviewList extends BaseList {
     private ReviewLink first;
-
 
     public ReviewList() {
         super();
@@ -25,9 +24,9 @@ public class ReviewList extends BaseList{
 
         if (first == null) {
             first = newLink;
-        }else{
+        } else {
             ReviewLink temp = first;
-            while(temp.next != null){
+            while (temp.next != null) {
                 temp = temp.next;
             }
             temp.next = newLink;
@@ -38,18 +37,23 @@ public class ReviewList extends BaseList{
     public void deleteByValue(Review instance) {
         ReviewLink temp = first;
         ReviewLink prev = null;
-        while(temp != null){
+        while (temp != null && temp.instance != instance) {
             prev = temp;
-            if(temp.instance.getId() == instance.getId()){
-                prev.next = temp.next;
-                size--;
-                return;
-            }
             temp = temp.next;
+        }
+        if (temp == null) {
+            return; // Value not found
+        }
+        if (prev == null) {
+            first = temp.next; // Deleting the first element
+            size--;
+        } else {
+            prev.next = temp.next; // Bypass the deleted
+            size--;
         }
     }
 
-    public Review[] toArray(){
+    public Review[] toArray() {
         ReviewLink temp = first;
 
         Review[] data = new Review[size];
@@ -80,10 +84,9 @@ public class ReviewList extends BaseList{
         current.instance = instance;
     }
 
-    public void clean(){
+    public void clean() {
         first = null;
         size = 0;
     }
-
 
 }

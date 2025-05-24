@@ -2,7 +2,7 @@ package com.service.carservice.cache;
 
 import com.service.carservice.models.Employee;
 
-class EmployeeLink{
+class EmployeeLink {
     public Employee instance;
     public EmployeeLink next;
 
@@ -11,9 +11,8 @@ class EmployeeLink{
     }
 }
 
-public class EmployeeList extends BaseList{
+public class EmployeeList extends BaseList {
     private EmployeeLink first;
-
 
     public EmployeeList() {
         super();
@@ -25,9 +24,9 @@ public class EmployeeList extends BaseList{
 
         if (first == null) {
             first = newLink;
-        }else{
+        } else {
             EmployeeLink temp = first;
-            while(temp.next != null){
+            while (temp.next != null) {
                 temp = temp.next;
             }
             temp.next = newLink;
@@ -38,18 +37,24 @@ public class EmployeeList extends BaseList{
     public void deleteByValue(Employee instance) {
         EmployeeLink temp = first;
         EmployeeLink prev = null;
-        while(temp != null){
+
+        while (temp != null && temp.instance != instance) {
             prev = temp;
-            if(temp.instance.getId() == instance.getId()){
-                prev.next = temp.next;
-                size--;
-                return;
-            }
             temp = temp.next;
+        }
+        if (temp == null) {
+            return; // Value not found
+        }
+        if (prev == null) {
+            first = temp.next; // Deleting the first element
+            size--;
+        } else {
+            prev.next = temp.next; // Bypass the deleted
+            size--;
         }
     }
 
-    public Employee[] toArray(){
+    public Employee[] toArray() {
         EmployeeLink temp = first;
 
         Employee[] data = new Employee[size];
@@ -80,10 +85,9 @@ public class EmployeeList extends BaseList{
         current.instance = instance;
     }
 
-    public void clean(){
+    public void clean() {
         first = null;
         size = 0;
     }
-
 
 }

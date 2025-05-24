@@ -20,7 +20,7 @@ public class ServiceRecordController {
     private ServiceRecordService serviceRecordService;
 
     @GetMapping
-    public ResponseEntity<ServiceRecord[]> getServices(@RequestParam String order) {
+    public ResponseEntity<ServiceRecord[]> getServices(@RequestParam(defaultValue = "asc") String order) {
         return new ResponseEntity<>(serviceRecordService.getAll(order), HttpStatus.OK);
     }
 

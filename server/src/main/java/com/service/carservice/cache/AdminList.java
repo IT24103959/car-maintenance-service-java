@@ -2,7 +2,7 @@ package com.service.carservice.cache;
 
 import com.service.carservice.models.Admin;
 
-class AdminLink{
+class AdminLink {
     public Admin instance;
     public AdminLink next;
 
@@ -11,9 +11,8 @@ class AdminLink{
     }
 }
 
-public class AdminList extends BaseList{
+public class AdminList extends BaseList {
     private AdminLink first;
-
 
     public AdminList() {
         super();
@@ -25,9 +24,9 @@ public class AdminList extends BaseList{
 
         if (first == null) {
             first = newLink;
-        }else{
+        } else {
             AdminLink temp = first;
-            while(temp.next != null){
+            while (temp.next != null) {
                 temp = temp.next;
             }
             temp.next = newLink;
@@ -38,18 +37,23 @@ public class AdminList extends BaseList{
     public void deleteByValue(Admin instance) {
         AdminLink temp = first;
         AdminLink prev = null;
-        while(temp != null){
+        while (temp != null && temp.instance != instance) {
             prev = temp;
-            if(temp.instance.getId() == instance.getId()){
-                prev.next = temp.next;
-                size--;
-                return;
-            }
             temp = temp.next;
+        }
+        if (temp == null) {
+            return; // Value not found
+        }
+        if (prev == null) {
+            first = temp.next; // Deleting the first element
+            size--;
+        } else {
+            prev.next = temp.next; // Bypass the deleted
+            size--;
         }
     }
 
-    public Admin[] toArray(){
+    public Admin[] toArray() {
         AdminLink temp = first;
 
         Admin[] data = new Admin[size];
@@ -80,10 +84,9 @@ public class AdminList extends BaseList{
         current.instance = instance;
     }
 
-    public void clean(){
+    public void clean() {
         first = null;
         size = 0;
     }
-
 
 }
