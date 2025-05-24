@@ -1,12 +1,8 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { FaLeaf, FaBell, FaChartLine } from "react-icons/fa";
-import Link from "next/link";
 
 export default function HomePage() {
-  const router = useRouter();
-
   return (
     <div className="h-screen w-screen">
       <div className="flex h-full">
