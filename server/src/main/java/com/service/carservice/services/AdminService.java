@@ -36,12 +36,10 @@ public class AdminService extends BaseService<Admin> {
         return updateById(id, updatedAdmin);
     }
 
-    @Override
     protected int getId(Admin admin) {
         return admin.getId();
     }
 
-    @Override
     protected void persistOnShutdown() {
         adminRepository.persistToFile(items);
     }
