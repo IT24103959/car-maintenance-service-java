@@ -36,12 +36,10 @@ public class ReviewService extends BaseService<Review> {
         return updateById(id, updatedReview);
     }
 
-    @Override
     protected int getId(Review review) {
         return review.getId();
     }
 
-    @Override
     protected void persistOnShutdown() {
         reviewRepository.persistToFile(items);
     }

@@ -68,12 +68,10 @@ public class ServiceRecordService extends BaseService<ServiceRecord> {
         return record;
     }
 
-    @Override
     protected int getId(ServiceRecord record) {
         return record.getId();
     }
 
-    @Override
     protected void persistOnShutdown() {
         serviceRecordRepository.persistToFile(items);
     }

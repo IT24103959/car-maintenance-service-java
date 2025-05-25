@@ -26,7 +26,6 @@ public class CarService extends BaseService<Car> {
         return itemsArr;
     }
 
-    @Override
     protected int getId(Car car) {
         return car.getId();
     }
