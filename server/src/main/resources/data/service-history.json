@@ -1,0 +1,1 @@
+[{"id":1,"cost":235.0,"completed":false,"car":{"id":0,"manufacturer":"Toyota","modelType":"Type A","vin":null,"registrationNumber":null,"owner":{"id":0,"name":"Ishanka Senevirathne","email":"ishankadsenevirathne@gmail.com","tel":"0714946943","address":"some address"},"carType":"Truck"},"date":"2025-05-15T07:04","description":"test","employeeId":1}]
