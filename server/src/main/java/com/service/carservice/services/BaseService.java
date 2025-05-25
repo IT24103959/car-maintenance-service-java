@@ -44,7 +44,6 @@ public abstract class BaseService<T> implements DisposableBean {
 
     protected abstract int getId(T item);
 
-    @Override
     public void destroy() {
         persistOnShutdown();
     }

@@ -47,12 +47,10 @@ public class ServiceRecord extends Record {
         this.description = description;
     }
 
-    @Override
     public void setCost(double cost) {
         this.cost = cost;
     }
 
-    @Override
     public void setCompleted(boolean completed) {
         this.completed = completed;
     }
